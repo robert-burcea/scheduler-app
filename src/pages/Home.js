@@ -11,9 +11,8 @@ const Home = () => {
   const setData = useSetData();
 
   return (
-    <div>
-        {}
-        <Todoist />
+    <div className="m-2">
+        <div>HOME</div>
     </div>
   )
 }

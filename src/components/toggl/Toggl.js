@@ -1,5 +1,9 @@
-const Toggl = function (togglApiKey) {
-  return togglApiKey;
+import React from 'react'
+
+const Toggl = () => {
+  return (
+    <div>Toggl</div>
+  )
 }
 
-export {Toggl}
+export default Toggl

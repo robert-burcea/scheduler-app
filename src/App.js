@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Todoist from "./components/todoist/Todoist";
-import {Toggl} from "./components/toggl/Toggl";
+import Toggl from "./components/toggl/Toggl";
 import {
   BrowserRouter as Router,
   Route,
@@ -13,6 +13,8 @@ import {
     collection, onSnapshot, doc, setDoc, updateDoc
   } from 'firebase/firestore'
   import { TodoistApi } from "@doist/todoist-api-typescript"
+import Navbar from './components/Navbar';
+import Admin from './pages/Admin';
 
 const togglApiKey = '77102011f8bf9ad5b1edf9f7df4fcaae'
 const api = new TodoistApi('7f66b2bae0474b388209dce9c4a16a6578fc8e6b')
@@ -122,8 +124,12 @@ function App() {
     <Router>
       <div className="App">
         {console.log(Toggl(togglApiKey))}
+        <div className=""><Navbar /></div>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/toggl" element={<Toggl />} />
+          <Route path="/todoist" element={<Todoist />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>
     </Router>

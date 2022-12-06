@@ -10,7 +10,7 @@ const Todoist = () => {
     const setData = useSetData();
 
     return (
-    <div>
+    <div className="m-2">
         {console.log("Data reaching Todoist", data)}
         {data?.todoist ? data?.todoist?.map((p) => {
         return <div>
