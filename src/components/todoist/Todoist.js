@@ -10,19 +10,18 @@ const Todoist = () => {
     const setData = useSetData();
 
     return (
-    <div className="m-2 max-w-[100%] max-h-[100%] h-full w-full mx-auto 
-    flex flex-col">
+    <div className="">
         {console.log("Data reaching Todoist", data)}
         {data?.todoist ? data?.todoist?.map((p) => {
         return <div>
             <h1 className="text-xl">{p.name}</h1>
-                <span className="max-w-[100%] max-h-[100%] mx-auto">
+                <div className="">
                     {p.tasks.map((t) => {
-                    return <span className="max-w-[100%] max-h-[100%] mx-auto text-clip overflow-hidden">
+                    return <div className="overflow-hidden">
                         {t.content}
-                        </span>
+                        </div>
                 })}
-                </span>
+                </div>
             </div>
         }) : <></>}
     </div>

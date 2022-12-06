@@ -115,7 +115,7 @@ function App() {
 
   return (
     <Router>
-      <div className="bg-gradient-to-r from-[#BBDBBE] to-[#DEEBDD] h-full w-full mx-auto max-w-[100%] max-h-[100%] scroll-auto">
+      <div className="bg-gradient-to-r from-[#BBDBBE] to-[#DEEBDD] w-full h-screen mx-auto max-w-[100%]">
         <div className=""><Navbar /></div>
         <Routes>
           <Route path="/" element={<Home />} />
