@@ -1,24 +1,14 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Todoist from "./Todoist";
+import {Toggl} from "./Toggl";
+
+const togglApiKey = '77102011f8bf9ad5b1edf9f7df4fcaae'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {console.log(Toggl(togglApiKey))}
+      <Todoist />
     </div>
   );
 }
