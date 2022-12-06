@@ -11,6 +11,7 @@ const Todoist = () => {
 
     return (
     <div>
+        {console.log("Data reaching Todoist", data)}
         {data?.todoist ? data?.todoist?.map((p) => {
         return <div>
             <h1 className="text-xl">{p.name}</h1>
