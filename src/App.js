@@ -38,13 +38,10 @@ function App() {
 
     onSnapshot(colRef, (snapshot) => {
         let dbCopy = null;
-        console.log(snapshot.docs)
         snapshot.docs.forEach((doc) => {
           dbCopy = doc.data();
         })
-        console.log('What i get:',dbCopy);
         setDbData(dbCopy);
-        console.log(dbCopy);
     })
   }
   const firebaseUpdateData = () => {
@@ -84,7 +81,6 @@ function App() {
     for(let i = 0; i < projects?.length; i++) {
         //creates empty array to store found tasks
         let project = projects[i];
-        console.log("Project", project)
         let tasksBelongingToProject = [];
         tasks?.forEach((task) => {
             //if the id of the task's projectId matches the project id
@@ -96,7 +92,6 @@ function App() {
         project.tasks = tasksBelongingToProject;
         newProjects.push(project)
     }
-    console.log(newProjects);
     setData({...data, todoist: newProjects})
     setReady(true)
 }
@@ -123,7 +118,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        {console.log(Toggl(togglApiKey))}
         <div className=""><Navbar /></div>
         <Routes>
           <Route path="/" element={<Home />} />
