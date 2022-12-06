@@ -45,9 +45,7 @@ function App() {
     })
   }
   const firebaseUpdateData = () => {
-    updateDoc(doc(db, "users", "robert"), {
-      data:{...data}
-    }).then(console.log("Doc set!"))
+    updateDoc(doc(db, "users", "robert"), {...data}).then(console.log("Doc set!"))
   }
 
   /* **********TODOIST FUNCTIONS************* */
