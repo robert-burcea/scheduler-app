@@ -41,7 +41,7 @@ function App() {
         snapshot.docs.forEach((doc) => {
           dbCopy = doc.data();
         })
-        setDbData(dbCopy);
+        setDbData({...dbCopy});
     })
   }
   const firebaseUpdateData = () => {
