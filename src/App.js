@@ -96,6 +96,51 @@ function App() {
 
   /* ************TOGGL FUNCTIONS************* */
 
+  const getTogglMe = () => {
+    fetch("https://api.track.toggl.com/api/v9/me", {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+"Authorization": `Basic ${btoa("77102011f8bf9ad5b1edf9f7df4fcaae:api_token")}`
+  },
+})
+.then((resp) => resp.json())
+.then((json) => {
+  console.log("TOGGL ME:", json);
+})
+.catch(err => console.error(err));
+  }
+
+  const getTogglProjects = () => {
+    fetch("https://api.track.toggl.com/api/v9/workspaces/5324929/projects", {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+"Authorization": `Basic ${btoa("77102011f8bf9ad5b1edf9f7df4fcaae:api_token")}`
+  },
+})
+.then((resp) => resp.json())
+.then((json) => {
+  console.log("TOGGL PROJECTS", json);
+})
+.catch(err => console.error(err));
+  }
+
+  const getTogglTimeEntries = () => {
+    fetch("https://api.track.toggl.com/api/v9/me/time_entries", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+    "Authorization": `Basic ${btoa("77102011f8bf9ad5b1edf9f7df4fcaae:api_token")}`
+      },
+    })
+    .then((resp) => resp.json())
+    .then((json) => {
+      console.log('TOGGL!:',json);
+    })
+    .catch(err => console.error(err));
+  }
+
 
   /* **************************************** */
 
@@ -117,6 +162,9 @@ function App() {
     <Router>
       <div className="bg-gradient-to-r from-[#BBDBBE] to-[#DEEBDD] w-full h-screen mx-auto max-w-[100%]">
         <div className=""><Navbar /></div>
+        {getTogglTimeEntries()}
+        {getTogglMe()}
+        {getTogglProjects()}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/toggl" element={<Toggl />} />
