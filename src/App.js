@@ -107,6 +107,7 @@ function App() {
 .then((resp) => resp.json())
 .then((json) => {
   console.log("TOGGL ME:", json);
+  return json;
 })
 .catch(err => console.error(err));
   }
@@ -122,6 +123,7 @@ function App() {
 .then((resp) => resp.json())
 .then((json) => {
   console.log("TOGGL PROJECTS", json);
+  return json;
 })
 .catch(err => console.error(err));
   }
@@ -137,10 +139,24 @@ function App() {
     .then((resp) => resp.json())
     .then((json) => {
       console.log('TOGGL!:',json);
+      return json;
     })
     .catch(err => console.error(err));
   }
 
+  const retrieveAllTogglInfo = () => {
+    const togglMe = getTogglMe()
+    const togglProjects = getTogglProjects()
+    const togglTimeEntries= getTogglTimeEntries();
+    setData({
+      ...data, 
+      toggl: {
+        togglMe: togglMe, 
+        togglProjects: togglProjects, 
+        togglTimeEntries: togglTimeEntries}
+      })
+      console.log(data)
+  }
 
   /* **************************************** */
 
@@ -162,9 +178,7 @@ function App() {
     <Router>
       <div className="bg-gradient-to-r from-[#BBDBBE] to-[#DEEBDD] w-full h-screen mx-auto max-w-[100%]">
         <div className=""><Navbar /></div>
-        {getTogglTimeEntries()}
-        {getTogglMe()}
-        {getTogglProjects()}
+        {retrieveAllTogglInfo()}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/toggl" element={<Toggl />} />
