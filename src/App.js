@@ -165,6 +165,9 @@ function App() {
     getTodoistData();
     firebaseDataFetch();
   },[])
+  useEffect(() => {
+    retrieveAllTogglInfo()
+  },[])
   //sets the firebase data into the global context
   useEffect(() => { 
     setData(dbData)
@@ -178,7 +181,6 @@ function App() {
     <Router>
       <div className="bg-gradient-to-r from-[#BBDBBE] to-[#DEEBDD] w-full h-screen mx-auto max-w-[100%]">
         <div className=""><Navbar /></div>
-        {retrieveAllTogglInfo()}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/toggl" element={<Toggl />} />
