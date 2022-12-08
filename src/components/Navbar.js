@@ -3,40 +3,43 @@ import { Link } from "react-router-dom";
 import {AiOutlineClose, AiOutlineMenu, AiOutlineMail} from 'react-icons/ai'
 import {FaLinkedinIn, FaGithub} from 'react-icons/fa'
 import {BsFillPersonLinesFill} from 'react-icons/bs'
+import { AiFillHome } from "react-icons/ai";
+import { SiTodoist, SiToggl } from "react-icons/si";
+import { BiUserCircle } from "react-icons/bi";
 
 const Navbar = () => {
 
     const [nav, setNav] = useState(false);
 
   return (
-    <div className="w-full h-20 shadow-xl bg-[#ecf0f3] z-[100]">
+    <div className="w-full h-20 shadow-xl bg-[#220a2e] z-[100]">
         <div className="flex justify-between items-center w-full h-full px-2 2xl:px-16">
             <h1>SCHEDULER</h1>
             <div>
             <ul className="hidden md:flex">
             <Link
         to="/"
-        className="bg-red-100 text-xl shadow-xl rounded-xl p-3 m-1 hover:scale-[110%]"
+        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
       >
-        ACASA
+        <AiFillHome size={35}/>
       </Link>
       <Link
         to="/todoist"
-        className="bg-red-100 text-xl shadow-xl rounded-xl p-3 m-1 hover:scale-[110%]"
+        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
       >
-        Todoist
+        <SiTodoist size={35}/>
       </Link>
       <Link
         to="/toggl"
-        className="bg-red-100 text-xl shadow-xl rounded-xl p-3 m-1 hover:scale-[110%]"
+        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
       >
-        TOGGL
+        <SiToggl size={35}/>
       </Link>
       <Link
         to="/admin"
-        className="bg-red-100 text-xl shadow-xl rounded-xl p-3 m-1 hover:scale-[110%]"
+        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
       >
-        Admin
+        <BiUserCircle size={35}/>
       </Link>
             </ul>
             <div className="md:hidden">
@@ -44,7 +47,7 @@ const Navbar = () => {
             </div>
             <div className={nav ? "md:hidden fixed left-0 top-0 w-full h-screen bg-black/70" : ""}>
                 <div className={nav ? 
-                    "fixed left-0 top-0 w-[75%] sm:w-[60%] md:w-[45%] h-screen bg-[#ecf0f3] p-10 ease-in duration-500" : 
+                    "fixed left-0 top-0 w-[45%] sm:w-[45%] md:w-[15%] h-screen bg-[#220a2e] p-10 ease-in duration-500" : 
                     "fixed left-[-100] hidden"}>
                 <div>
                     <div className="flex w-full items-center justify-between">
@@ -57,35 +60,35 @@ const Navbar = () => {
                         <p className="w-[85%] md:w-[90%] py-4">MENU</p>
                     </div>
                 </div>
-                <div className="py-4 flex flex-col">
-                    <ul className="uppercase flex flex-col">
+                <div className="py-4 flex items-center">
+                    <ul className="uppercase flex flex-col justify-items-center">
                     <Link
                     onClick={() => {setNav(!nav)}}
         to="/"
-        className="bg-red-100 text-xl shadow-xl rounded-xl p-3 m-1 hover:scale-[110%]"
+        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
       >
-        ACASA
+       <AiFillHome size={35} className="ml-[130%]" />
       </Link>
       <Link
       onClick={() => {setNav(!nav)}}
         to="/todoist"
-        className="bg-red-100 text-xl shadow-xl rounded-xl p-3 m-1 hover:scale-[110%]"
+        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
       >
-        Todoist
+        <SiTodoist size={35} className="ml-[130%]" />
       </Link>
       <Link
       onClick={() => {setNav(!nav)}}
         to="/toggl"
-        className="bg-red-100 text-xl shadow-xl rounded-xl p-3 m-1 hover:scale-[110%]"
+        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
       >
-        TOGGL
+        <SiToggl size={35} className="ml-[130%]" />
       </Link>
       <Link
       onClick={() => {setNav(!nav)}}
         to="/admin"
-        className="bg-red-100 text-xl shadow-xl rounded-xl p-3 m-1 hover:scale-[110%]"
+        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
       >
-        Admin
+        <BiUserCircle size={35} className="ml-[130%]" />
       </Link>
                     </ul>
                 </div>

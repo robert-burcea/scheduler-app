@@ -179,7 +179,7 @@ function App() {
 
   return (
     <Router>
-      <div className="bg-gradient-to-r from-[#BBDBBE] to-[#DEEBDD] w-full h-screen mx-auto max-w-[100%]">
+      <div className="bg-[#412a4c] w-full h-screen mx-auto max-w-[100%] text-white">
         <div className=""><Navbar /></div>
         <Routes>
           <Route path="/" element={<Home />} />
