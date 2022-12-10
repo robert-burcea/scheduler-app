@@ -1,8 +1,15 @@
 import React from 'react'
+import {useData, useSetData} from '../../GlobalContext'
 
 const Toggl = () => {
+
+  const data = useData();
+  const setData = useSetData();
+  
   return (
-    <div>Toggl</div>
+    <div>
+      {console.log(data)}
+    </div>
   )
 }
 

@@ -25,10 +25,12 @@ function App() {
   const setData = useSetData();
   //dbData is the data fetched from firebase
   const [dbData, setDbData] = useState({})
-  const [projects, setProjects] = useState();
-  const [tasks, setTasks] = useState();
+  const [togglProjects, setTogglProjects] = useState();
+  const [togglTimeEntries, setTogglTimeEntries] = useState();
+  const [togglMe, setTogglMe] = useState();
+  const [readyToggl, setReadyToggl] = useState(false);
   //if the TODOIST AND TOGGL DATA WAS FETCHED, ready triggers the FIREBASE UPDATE WITH THE DATA
-  const [ready, setReady] = useState(false);
+  const [readyTodoist, setReadyTodoist] = useState(false);
 
   /* *********FIREBASE FUNCTIONS************ */
 
@@ -90,24 +92,27 @@ function App() {
         project.tasks = tasksBelongingToProject;
         newProjects.push(project)
     }
-    setData({...data, todoist: newProjects})
-    setReady(true)
+    setData({todoist: newProjects})
+    setReadyTodoist(true)
 }
 
   /* ************TOGGL FUNCTIONS************* */
+
+  /***************TOGGL GET *********************** */
 
   const getTogglMe = () => {
     fetch("https://api.track.toggl.com/api/v9/me", {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
-"Authorization": `Basic ${btoa("77102011f8bf9ad5b1edf9f7df4fcaae:api_token")}`
+"Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`
   },
 })
 .then((resp) => resp.json())
 .then((json) => {
   console.log("TOGGL ME:", json);
-  return json;
+  setTogglMe(json);
+  console.log(data)
 })
 .catch(err => console.error(err));
   }
@@ -117,13 +122,13 @@ function App() {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
-"Authorization": `Basic ${btoa("77102011f8bf9ad5b1edf9f7df4fcaae:api_token")}`
+"Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`
   },
 })
 .then((resp) => resp.json())
 .then((json) => {
   console.log("TOGGL PROJECTS", json);
-  return json;
+  setTogglProjects(json);
 })
 .catch(err => console.error(err));
   }
@@ -133,29 +138,43 @@ function App() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-    "Authorization": `Basic ${btoa("77102011f8bf9ad5b1edf9f7df4fcaae:api_token")}`
+    "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`
       },
     })
     .then((resp) => resp.json())
     .then((json) => {
-      console.log('TOGGL!:',json);
-      return json;
+      console.log('TOGGL TIME ENTRIES:',json);
+      setTogglTimeEntries(json);
     })
     .catch(err => console.error(err));
   }
 
   const retrieveAllTogglInfo = () => {
-    const togglMe = getTogglMe()
-    const togglProjects = getTogglProjects()
-    const togglTimeEntries= getTogglTimeEntries();
-    setData({
-      ...data, 
-      toggl: {
-        togglMe: togglMe, 
-        togglProjects: togglProjects, 
-        togglTimeEntries: togglTimeEntries}
-      })
-      console.log(data)
+    getTogglMe()
+    getTogglProjects()
+    getTogglTimeEntries();
+    setReadyToggl(true);
+  }
+
+  /***************TOGGL UPDATE *********************** */
+
+  const updateTogglProject = (workspaceId, projectId) => {
+    fetch(`https://api.track.toggl.com/api/v9/workspaces/${workspaceId}/projects/${projectId}`, {
+  method: "PUT",
+  body: {"active":"boolean","auto_estimates":"boolean","billable":"boolean","cid":"integer","client_id":"integer",
+  "client_name":"string","color":"string","currency":"string","end_date":"string","estimated_hours":"integer",
+  "fixed_fee":"number","is_private":"boolean","name":"string","rate":"number","rate_change_mode":"string","recurring":"boolean",
+  "recurring_parameters":{"custom_period":"integer","period":"string","project_start_date":"string"},"start_date":"string","template":"boolean","template_id":"integer"},
+  headers: {
+    "Content-Type": "application/json",
+"Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`
+  },
+})
+.then((resp) => resp.json())
+.then((json) => {
+  console.log(json);
+})
+.catch(err => console.error(err));
   }
 
   /* **************************************** */
@@ -172,15 +191,20 @@ function App() {
   useEffect(() => { 
     setData(dbData)
   },[dbData])
+  useEffect(() => {
+    setData({...data, toggl: { togglMe:togglMe, togglProjects:togglProjects, togglTimeEntries:togglTimeEntries}})
+    setReadyToggl(false)
+  },[readyToggl])
   useEffect(() => { 
     firebaseUpdateData();
-    setReady(false);
-  },[ready])
+    setReadyTodoist(false);
+  },[readyTodoist])
 
   return (
     <Router>
       <div className="bg-[#412a4c] w-full h-screen mx-auto max-w-[100%] text-white">
         <div className=""><Navbar /></div>
+        {console.log(data)}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/toggl" element={<Toggl />} />
