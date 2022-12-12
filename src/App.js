@@ -29,9 +29,13 @@ function App() {
   const [togglProjects, setTogglProjects] = useState();
   const [togglTimeEntries, setTogglTimeEntries] = useState();
   const [togglMe, setTogglMe] = useState();
-  const [readyToggl, setReadyToggl] = useState(false);
+  const [todoistData, setTodoistData] = useState();
+  const [readyTodoist, setReadyTodoist] = useState(false)
+  const [readyTogglProjects, setReadyTogglProjects] = useState(false)
+  const [readyTogglTimeEntries, setReadyTogglTimeEntries] = useState(false)
+  const [readyTogglMe, setReadyTogglMe] = useState(false);
+  const [readyAllToggl, setReadyAllToggl] = useState(false);
   //if the TODOIST AND TOGGL DATA WAS FETCHED, ready triggers the FIREBASE UPDATE WITH THE DATA
-  const [readyTodoist, setReadyTodoist] = useState(false);
 
   /* *********FIREBASE FUNCTIONS************ */
 
@@ -89,7 +93,7 @@ function App() {
         project.tasks = tasksBelongingToProject;
         newProjects.push(project)
     }
-    setData({...data, todoist: newProjects})
+    setTodoistData(newProjects)
     setReadyTodoist(true)
 }
 
@@ -99,61 +103,55 @@ function App() {
 
   const getTogglMe = async () => {
     try {
-      const resp = await axios({
-      method:'get',
-      url:"https://api.track.toggl.com/api/v9/me",
+      await axios.get("https://api.track.toggl.com/api/v9/me", {
       headers: {
         "Content-Type": "application/json",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
+      }).then((resp) => {
+        setTogglMe(resp.data)
+        setReadyTogglMe(true)
       })
-      setTogglMe(resp.data)
   }
   catch (err) {
     console.log(err)
   }
   }
 
-  const getTogglProjects = async () => {
+  const getTogglProjects = (default_workspace_id) => {
     try {
-      const resp = await axios({
-      method:'get',
-      url:"https://api.track.toggl.com/api/v9/workspaces/5324929/projects",
+      axios.get(`https://api.track.toggl.com/api/v9/workspaces/${default_workspace_id}/projects`,{
       headers: {
         "Content-Type": "application/json",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
+      }).then((resp) => {
+        setTogglProjects(resp.data);
+        setReadyTogglProjects(true);
       })
-      setTogglProjects(resp.data)
   }
   catch (err) {
     console.log(err)
   }
 }
 
-  const getTogglTimeEntries = async () => {
+  const getTogglTimeEntries = () => {
     try {
-      const resp = await axios({
-      method:'get',
-      url:"https://api.track.toggl.com/api/v9/me/time_entries",
+      axios.get("https://api.track.toggl.com/api/v9/me/time_entries", {
       headers: {
         "Content-Type": "application/json",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
+      }).then((resp) => {
+        setTogglTimeEntries(resp.data);
+        setReadyTogglTimeEntries(true);
       })
-      setTogglTimeEntries(resp.data)
   }
   catch (err) {
     console.log(err)
   }
 }
 
-  const retrieveAllTogglInfo = async () => {
-    await getTogglMe()
-    await getTogglProjects()
-    await getTogglTimeEntries();
-    setReadyToggl(true);
-    console.log("TOGGL ME STATE:", togglMe)
-    console.log("TOGGL PROJ STATE", togglProjects)
-    console.log("TOGGL TE STATE:", togglTimeEntries)
-    setData({...data, toggl: { togglMe:togglMe, togglProjects:togglProjects, togglTimeEntries:togglTimeEntries}})
+  const fetchTodoistAndTogglInfo = () => {
+    getTodoistData();
+    getTogglMe()
   }
 
   /***************TOGGL UPDATE *********************** */
@@ -181,26 +179,30 @@ function App() {
 
   //fetches data from toggl and todoist one time when app starts
   useEffect(() => {
-    getTodoistData();
+    fetchTodoistAndTogglInfo();
    },[])
    useEffect(() => {
-   retrieveAllTogglInfo()
-   },[])
-  useEffect(() => { 
-    //updates the new received data in firebase, this will be done live on all devices
-    firebaseUpdateData();
-    setReadyTodoist(false);
-  },[])
-  useEffect(() => {
-    //firebaseDataFetch();
-  },[])
-  //sets the firebase data into the global context
-  useEffect(() => { 
-    //setData(dbData)
-  },[dbData])
+    if(readyTogglMe) {
+      getTogglProjects(togglMe.default_workspace_id)
+      getTogglTimeEntries()
+      setReadyTogglMe(false)
+      setReadyAllToggl(true)
+    }
+   },[readyTogglMe])
+   useEffect(() => {
+    if(readyAllToggl && readyTodoist && readyTogglProjects && readyTogglTimeEntries) {
+      setData({todoist: todoistData, toggl: {togglMe: togglMe, togglProjects: togglProjects, togglTimeEntries: togglTimeEntries}})
+      setReadyAllToggl(false)
+    }
+   },[readyAllToggl, readyTodoist, readyTogglProjects, readyTogglTimeEntries])
+
 
   return (
-    <Router>
+     <Router>
+       {togglMe ? console.log("TOGGL ME:", togglMe) : <></>}
+       {togglProjects ? console.log("TOGGL PROJECTS:", togglProjects) : <></>}
+       {togglTimeEntries ? console.log("TOGGL TE:", togglTimeEntries) : <></>}
+       {data ? console.log("Data in APP:", data) : <></>}
       <div className="bg-[#412a4c] w-full h-full mx-auto max-w-[100%] text-white">
         <div className=""><Navbar /></div>
         <Routes>
