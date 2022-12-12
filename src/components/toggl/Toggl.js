@@ -8,7 +8,11 @@ const Toggl = () => {
   
   return (
     <div>
-      {console.log(data)}
+      {data ? data?.toggl?.togglProjects?.map((project) => {
+        return (
+          <div>{project.name}</div>
+        )
+      }) : <div></div>}
     </div>
   )
 }

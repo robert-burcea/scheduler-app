@@ -149,10 +149,10 @@ function App() {
   }
 }
 
-  const retrieveAllTogglInfo = () => {
-    getTogglMe()
-    getTogglProjects()
-    getTogglTimeEntries();
+  const retrieveAllTogglInfo = async () => {
+    await getTogglMe()
+    await getTogglProjects()
+    await getTogglTimeEntries();
     setReadyToggl(true);
     console.log("TOGGL ME STATE:", togglMe)
     console.log("TOGGL PROJ STATE", togglProjects)
