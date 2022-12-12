@@ -106,6 +106,7 @@ function App() {
       await axios.get("https://api.track.toggl.com/api/v9/me", {
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
       }).then((resp) => {
         setTogglMe(resp.data)
@@ -122,6 +123,7 @@ function App() {
       axios.get(`https://api.track.toggl.com/api/v9/workspaces/${default_workspace_id}/projects`,{
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
       }).then((resp) => {
         setTogglProjects(resp.data);
@@ -138,6 +140,7 @@ function App() {
       axios.get("https://api.track.toggl.com/api/v9/me/time_entries", {
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
       }).then((resp) => {
         setTogglTimeEntries(resp.data);

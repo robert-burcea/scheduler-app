@@ -1,5 +1,6 @@
 import React from 'react'
 import {useData, useSetData} from '../../GlobalContext'
+import TodoistTask from '../todoist/TodoistTask';
 import TogglProject from './TogglProject';
 
 const Toggl = () => {
@@ -12,13 +13,18 @@ const Toggl = () => {
       {/* it firsts sorts the projects, min hours spent to max hours spent on it, then maps it */}
       {console.log("DATA IN TOGGL COMPONENT:", data)}
       {data ? data?.toggl?.togglProjects?.sort((a,b) => a.actual_hours-b.actual_hours).map((togglProject) => {
-        /*let todoistTasksMatchingTogglProject = [];
+        let todoistTasksMatchingTogglProject = [];
         data?.todoist?.forEach((todoistProject) => {
           if(todoistProject.name.toLowerCase() === togglProject.name.toLowerCase())
             todoistTasksMatchingTogglProject.push(...todoistProject.tasks)
-        })*/
+        })
         return (
-          <TogglProject project={togglProject}/>
+          <div>
+            <TogglProject project={togglProject}/>
+            {todoistTasksMatchingTogglProject?.map((task) => {
+              return <TodoistTask task={task}/>
+            })}
+          </div>
         )
       }) : <div></div>}
     </div>
