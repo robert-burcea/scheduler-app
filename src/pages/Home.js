@@ -96,7 +96,6 @@ const Home = () => {
   const getTogglMe = async () => {
     try {
       await axios.get("https://api.track.toggl.com/api/v9/me", {
-      "Access-Control-Allow-Origin": "*",
       headers: {
         "Content-Type": "application/json",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
@@ -115,7 +114,6 @@ const Home = () => {
       axios.get(`https://api.track.toggl.com/api/v9/workspaces/${default_workspace_id}/projects`,{
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
       }).then((resp) => {
         setTogglProjects(resp.data);
@@ -132,7 +130,6 @@ const Home = () => {
       axios.get("https://api.track.toggl.com/api/v9/me/time_entries", {
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
       }).then((resp) => {
         setTogglTimeEntries(resp.data);
@@ -187,7 +184,7 @@ const Home = () => {
    },[readyTogglMe, data.apis.value])
    useEffect(() => {
     if(readyAllToggl && readyTodoist && readyTogglProjects && readyTogglTimeEntries & data.apis.value) {
-      setData({todoist: todoistData, toggl: {togglMe: togglMe, togglProjects: togglProjects, togglTimeEntries: togglTimeEntries}})
+      setData({...data, todoist: todoistData, toggl: {togglMe: togglMe, togglProjects: togglProjects, togglTimeEntries: togglTimeEntries}})
       setReadyAllToggl(false)
     }
    },[readyAllToggl, readyTodoist, readyTogglProjects, readyTogglTimeEntries, data.apis.value])
