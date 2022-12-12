@@ -18,7 +18,7 @@ import Admin from './pages/Admin';
 import axios from 'axios'
 
 const togglApiKey = '77102011f8bf9ad5b1edf9f7df4fcaae'
-const api = new TodoistApi('7f66b2bae0474b388209dce9c4a16a6578fc8e6b')
+const todoistApi = new TodoistApi('7f66b2bae0474b388209dce9c4a16a6578fc8e6b')
 
 function App() {
   //data and setData are the subscriptions to the Global Context
@@ -56,18 +56,14 @@ function App() {
   //fetches the data from TODOIST
   const getTodoistData = () => {
     //fetches TODOIST projects
-    api.getProjects()
+    todoistApi.getProjects()
     .then((projects) => {
-      api.getTasks()
+      todoistApi.getTasks()
       .then((tasks) => {
         combineTodoistData(projects,tasks)
       })
     })
     .catch((error) => console.log(error))
-    //fetches TODOIST tasks
-    /*api.getTasks()
-    .then((tasks) => {setTasks(tasks); console.log(tasks)})
-    .catch((error) => console.log(error))*/
   }
 
   const refreshTodoist = () => {
@@ -205,7 +201,7 @@ function App() {
 
   return (
     <Router>
-      <div className="bg-[#412a4c] w-full h-screen mx-auto max-w-[100%] text-white">
+      <div className="bg-[#412a4c] w-full h-full mx-auto max-w-[100%] text-white">
         <div className=""><Navbar /></div>
         <Routes>
           <Route path="/" element={<Home />} />

@@ -1,5 +1,6 @@
 import React from 'react'
 import {useData, useSetData} from '../../GlobalContext'
+import TogglProject from './TogglProject';
 
 const Toggl = () => {
 
@@ -10,7 +11,7 @@ const Toggl = () => {
     <div>
       {data ? data?.toggl?.togglProjects?.map((project) => {
         return (
-          <div>{project.name}</div>
+          <TogglProject project={project}/>
         )
       }) : <div></div>}
     </div>

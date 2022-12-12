@@ -19,25 +19,25 @@ const Navbar = () => {
             <ul className="hidden md:flex">
             <Link
         to="/"
-        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
+        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[90%] md:hover:scale-[110%]"
       >
-        <AiFillHome size={35}/>
+        <AiFillHome size={40}/>
       </Link>
       <Link
         to="/todoist"
-        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
+        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[90%] md:hover:scale-[110%]"
       >
-        <SiTodoist size={35}/>
+        <SiTodoist size={35} color={'red'}/>
       </Link>
       <Link
         to="/toggl"
-        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
+        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[90%] md:hover:scale-[110%]"
       >
-        <SiToggl size={35}/>
+        <SiToggl size={35} color={'#a04a97'}/>
       </Link>
       <Link
         to="/admin"
-        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
+        className="flex items-center text-xl shadow-xl rounded-xl m-1 hover:scale-[90%] md:hover:scale-[110%]"
       >
         <BiUserCircle size={35}/>
       </Link>
@@ -65,28 +65,28 @@ const Navbar = () => {
                     <Link
                     onClick={() => {setNav(!nav)}}
         to="/"
-        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
+        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[90%] md:hover:scale-[110%]"
       >
        <AiFillHome size={35} className="ml-[130%]" />
       </Link>
       <Link
       onClick={() => {setNav(!nav)}}
         to="/todoist"
-        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
+        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[90%] md:hover:scale-[110%]"
       >
-        <SiTodoist size={35} className="ml-[130%]" />
+        <SiTodoist size={35} color={'red'} className="ml-[130%]" />
       </Link>
       <Link
       onClick={() => {setNav(!nav)}}
         to="/toggl"
-        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
+        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[90%] md:hover:scale-[110%]"
       >
-        <SiToggl size={35} className="ml-[130%]" />
+        <SiToggl size={35} color={'#a04a97'} className="ml-[130%]" />
       </Link>
       <Link
       onClick={() => {setNav(!nav)}}
         to="/admin"
-        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[110%]"
+        className="text-xl shadow-xl rounded-xl m-1 hover:scale-[90%] md:hover:scale-[110%]"
       >
         <BiUserCircle size={35} className="ml-[130%]" />
       </Link>
