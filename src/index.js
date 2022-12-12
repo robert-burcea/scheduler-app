@@ -10,7 +10,7 @@ import DataContext from './GlobalContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   //<React.StrictMode>
-    <DataContext value={null}><App /></DataContext>
+    <DataContext value={{apis:{value:false}}}><App /></DataContext>
   //</React.StrictMode>
 );
 
