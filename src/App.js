@@ -105,7 +105,6 @@ function App() {
     try {
       await axios.get("https://api.track.toggl.com/api/v9/me", {
       headers: {
-        "Access-Control-Allow-Origin": "https://scheduler-app-v2.vercel.app",
         "Content-Type": "application/json",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
       }).then((resp) => {
@@ -122,7 +121,6 @@ function App() {
     try {
       axios.get(`https://api.track.toggl.com/api/v9/workspaces/${default_workspace_id}/projects`,{
       headers: {
-        "Access-Control-Allow-Origin": "https://scheduler-app-v2.vercel.app",
         "Content-Type": "application/json",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
       }).then((resp) => {
@@ -139,7 +137,6 @@ function App() {
     try {
       axios.get("https://api.track.toggl.com/api/v9/me/time_entries", {
       headers: {
-        "Access-Control-Allow-Origin": "https://scheduler-app-v2.vercel.app",
         "Content-Type": "application/json",
     "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
       }).then((resp) => {
