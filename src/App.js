@@ -103,11 +103,7 @@ function App() {
 
   const getTogglMe = async () => {
     try {
-      await axios.get("https://api.track.toggl.com/api/v9/me", {
-      headers: {
-        "Content-Type": "application/json",
-    "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
-      }).then((resp) => {
+      await axios.get("http://localhost:5000/toggl/me").then((resp) => {
         setTogglMe(resp.data)
         setReadyTogglMe(true)
       })
@@ -119,11 +115,7 @@ function App() {
 
   const getTogglProjects = (default_workspace_id) => {
     try {
-      axios.get(`https://api.track.toggl.com/api/v9/workspaces/${default_workspace_id}/projects`,{
-      headers: {
-        "Content-Type": "application/json",
-    "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
-      }).then((resp) => {
+      axios.get(`http://localhost:5000/toggl/projects/${default_workspace_id}`).then((resp) => {
         setTogglProjects(resp.data);
         setReadyTogglProjects(true);
       })
@@ -135,11 +127,7 @@ function App() {
 
   const getTogglTimeEntries = () => {
     try {
-      axios.get("https://api.track.toggl.com/api/v9/me/time_entries", {
-      headers: {
-        "Content-Type": "application/json",
-    "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`}
-      }).then((resp) => {
+      axios.get("http://localhost:5000/toggl/timeEntries").then((resp) => {
         setTogglTimeEntries(resp.data);
         setReadyTogglTimeEntries(true);
       })
