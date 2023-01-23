@@ -5,8 +5,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const todoist = require('@doist/todoist-api-typescript');
 
-const togglApiKey = '77102011f8bf9ad5b1edf9f7df4fcaae'
-
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
