@@ -81,6 +81,7 @@ app.get('/todoist/', (req,res) => {
     //fetches TODOIST projects
     todoistApi.getProjects()
     .then((projects) => {
+        //fetches TODOIST tasks
         todoistApi.getTasks()
         .then((tasks) => {
             todoistData = combineTodoistData(projects,tasks);

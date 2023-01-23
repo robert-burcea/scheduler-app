@@ -23,6 +23,7 @@ function App() {
   const setData = useSetData();
   const [togglApiKey, setTogglApiKey] = useState('');
   const [todoistApiKey, setTodoistApiKey] = useState('');
+  const [apisReady, setApisReady] = useState(false);
   //dbData is the data fetched from firebase
   const [dbData, setDbData] = useState({})
   const [compoundedProjectsAndTasks, setCompoundedProjectsAndTasks] = useState([])
@@ -32,12 +33,14 @@ function App() {
     //if the TODOIST AND TOGGL DATA WAS FETCHED, ready triggers the FIREBASE UPDATE WITH THE DATA
 
 
-  /*const getApis = () => {
-    let togglApi = prompt("Insert Toggl API:")
+  const getApis = () => {
+    let togglApiKey = prompt("Insert Toggl API:")
     let todoistApiKey = prompt("Insert Todoist API:")
-    setTogglApiKey(togglApi)
+    setTogglApiKey(togglApiKey)
     setTodoistApiKey(todoistApiKey)
-  }*/
+    console.log(todoistApiKey, togglApiKey)
+    setApisReady(true)
+  }
 
   /* *********FIREBASE FUNCTIONS************ */
 
@@ -60,10 +63,18 @@ function App() {
   /* **********TODOIST FUNCTIONS************* */
 
   const fetchAllData = () => {
-    fetch('http://localhost:5000/todoist/')
+    fetch(`http://localhost:5000/todoist/`, {
+      headers: {
+        'Authorization':`${todoistApiKey}`
+      }
+    })
     .then((response) => response.json())
     .then((todoistData) => {
-      fetch('http://localhost:5000/toggl/')
+      fetch(`http://localhost:5000/toggl/`, {
+        headers: {
+          'Authorization':`${togglApiKey}`
+        }
+      })
       .then((response) => response.json())
       .then((togglData) => {
         setTodoistData(todoistData)
@@ -111,9 +122,11 @@ function App() {
 
   //fetches data from toggl and todoist one time when app starts
   useEffect(() => {
-    //getApis();
-    fetchTodoistAndTogglInfo();
+    getApis();
    },[])
+   useEffect(() => {
+    fetchTodoistAndTogglInfo();
+   },[apisReady])
    useEffect(() => {
     if(fetchingReady) {
       setData({todoist: todoistData, toggl: {...togglData.toggl}})
