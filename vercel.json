@@ -8,7 +8,12 @@
     ],
     "routes": [
       {
-        "handle": "filesystem"
+        "src": "/api/toggl",
+        "dest": "server.js"
+      },
+      {
+        "src": "/api/todoist",
+        "dest": "server.js"
       }
     ]
   }

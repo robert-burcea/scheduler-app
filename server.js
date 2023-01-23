@@ -13,7 +13,7 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/toggl/', (req, res) => {
+app.get('/api/toggl', (req, res) => {
     var togglMe = {};
     var togglProjects = {};
     var togglTimeEntries = {};
@@ -51,7 +51,7 @@ app.get('/toggl/', (req, res) => {
     })
 });
 
-app.get('/todoist/', (req,res) => {
+app.get('/api/todoist', (req,res) => {
     const todoistApiKey = req.headers.authorization;
     const combineTodoistData = (projects, tasks) => {
         //creates empty array that will be the modified projects 
