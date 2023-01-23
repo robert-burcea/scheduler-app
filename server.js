@@ -19,6 +19,7 @@ app.get('/toggl/', (req, res) => {
     var togglMe = {};
     var togglProjects = {};
     var togglTimeEntries = {};
+    const togglApiKey = req.headers.authorization;
     fetch('https://api.track.toggl.com/api/v9/me', {
         headers: {
             "Authorization": `Basic ${Buffer.from(`${togglApiKey}:api_token`).toString('base64')}`
@@ -53,6 +54,7 @@ app.get('/toggl/', (req, res) => {
 });
 
 app.get('/todoist/', (req,res) => {
+    const todoistApiKey = req.headers.authorization;
     const combineTodoistData = (projects, tasks) => {
         //creates empty array that will be the modified projects 
         //where each project will have an obj 'tasks' (the tasks corresponding to the project)
@@ -76,7 +78,6 @@ app.get('/todoist/', (req,res) => {
     }
 
     var todoistData = [];
-    const todoistApiKey = '3a8d3f0f43679e40da2ce646cf537b51b6835871';
     let todoistApi = new todoist.TodoistApi(todoistApiKey)
     //fetches TODOIST projects
     todoistApi.getProjects()

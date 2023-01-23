@@ -24,6 +24,7 @@ function App() {
   const [togglApiKey, setTogglApiKey] = useState('');
   const [todoistApiKey, setTodoistApiKey] = useState('');
   const [apisReady, setApisReady] = useState(false);
+  const [apisReady, setApisReady] = useState(false);
   //dbData is the data fetched from firebase
   const [dbData, setDbData] = useState({})
   const [compoundedProjectsAndTasks, setCompoundedProjectsAndTasks] = useState([])
@@ -35,9 +36,15 @@ function App() {
 
   const getApis = () => {
     let togglApiKey = prompt("Insert Toggl API:")
+  const getApis = () => {
+    let togglApiKey = prompt("Insert Toggl API:")
     let todoistApiKey = prompt("Insert Todoist API:")
     setTogglApiKey(togglApiKey)
+    setTogglApiKey(togglApiKey)
     setTodoistApiKey(todoistApiKey)
+    console.log(todoistApiKey, togglApiKey)
+    setApisReady(true)
+  }
     console.log(todoistApiKey, togglApiKey)
     setApisReady(true)
   }
@@ -122,6 +129,9 @@ function App() {
 
   //fetches data from toggl and todoist one time when app starts
   useEffect(() => {
+    getApis();
+   },[])
+   useEffect(() => {
     getApis();
    },[])
    useEffect(() => {
