@@ -63,14 +63,14 @@ function App() {
   /* **********TODOIST FUNCTIONS************* */
 
   const fetchAllData = () => {
-    fetch(`https://scheduler-app-v2.vercel.app:5000/todoist/`, {
+    fetch(`https://localhost:5000/todoist/`, {
       headers: {
         'Authorization':`${todoistApiKey}`
       }
     })
     .then((response) => response.json())
     .then((todoistData) => {
-      fetch(`http://scheduler-app-v2.vercel.app:5000/toggl/`, {
+      fetch(`http://localhost:5000/toggl/`, {
         headers: {
           'Authorization':`${togglApiKey}`
         }
