@@ -17,25 +17,27 @@ import Navbar from './components/Navbar';
 import Admin from './pages/Admin';
 import axios from 'axios'
 
-const togglApiKey = '77102011f8bf9ad5b1edf9f7df4fcaae'
-const todoistApi = new TodoistApi('7f66b2bae0474b388209dce9c4a16a6578fc8e6b')
-
 function App() {
   //data and setData are the subscriptions to the Global Context
   const data = useData();
   const setData = useSetData();
+  const [togglApiKey, setTogglApiKey] = useState('');
+  const [todoistApiKey, setTodoistApiKey] = useState('');
   //dbData is the data fetched from firebase
   const [dbData, setDbData] = useState({})
-  const [togglProjects, setTogglProjects] = useState();
-  const [togglTimeEntries, setTogglTimeEntries] = useState();
-  const [togglMe, setTogglMe] = useState();
+  const [compoundedProjectsAndTasks, setCompoundedProjectsAndTasks] = useState([])
+  const [togglData, setTogglData] = useState();
   const [todoistData, setTodoistData] = useState();
-  const [readyTodoist, setReadyTodoist] = useState(false)
-  const [readyTogglProjects, setReadyTogglProjects] = useState(false)
-  const [readyTogglTimeEntries, setReadyTogglTimeEntries] = useState(false)
-  const [readyTogglMe, setReadyTogglMe] = useState(false);
-  const [readyAllToggl, setReadyAllToggl] = useState(false);
-  //if the TODOIST AND TOGGL DATA WAS FETCHED, ready triggers the FIREBASE UPDATE WITH THE DATA
+  const [fetchingReady, setFetchingReady] = useState(false)
+    //if the TODOIST AND TOGGL DATA WAS FETCHED, ready triggers the FIREBASE UPDATE WITH THE DATA
+
+
+  /*const getApis = () => {
+    let togglApi = prompt("Insert Toggl API:")
+    let todoistApiKey = prompt("Insert Todoist API:")
+    setTogglApiKey(togglApi)
+    setTodoistApiKey(todoistApiKey)
+  }*/
 
   /* *********FIREBASE FUNCTIONS************ */
 
@@ -57,144 +59,75 @@ function App() {
 
   /* **********TODOIST FUNCTIONS************* */
 
-  //fetches the data from TODOIST
-  const getTodoistData = () => {
-    //fetches TODOIST projects
-    todoistApi.getProjects()
-    .then((projects) => {
-      todoistApi.getTasks()
-      .then((tasks) => {
-        combineTodoistData(projects,tasks)
+  const fetchAllData = () => {
+    fetch('http://localhost:5000/todoist/')
+    .then((response) => response.json())
+    .then((todoistData) => {
+      fetch('http://localhost:5000/toggl/')
+      .then((response) => response.json())
+      .then((togglData) => {
+        setTodoistData(todoistData)
+        setTogglData(togglData)
+        setFetchingReady(true)
       })
     })
-    .catch((error) => console.log(error))
   }
-
-  const refreshTodoist = () => {
-    getTodoistData()
-  }
-
-  const combineTodoistData = (projects, tasks) => {
-    //creates empty array that will be the modified projects 
-    //where each project will have an obj 'tasks' (the tasks corresponding to the project)
-    let newProjects = [];
-    //cicles through every project in search of tasks that belong to the current project
-    for(let i = 0; i < projects?.length; i++) {
-        //creates empty array to store found tasks
-        let project = projects[i];
-        let tasksBelongingToProject = [];
-        tasks?.forEach((task) => {
-            //if the id of the task's projectId matches the project id
-            if(task.projectId === project.id)
-            {
-                tasksBelongingToProject.push(task)
-            }
-        })
-        project.tasks = tasksBelongingToProject;
-        newProjects.push(project)
-    }
-    setTodoistData(newProjects)
-    setReadyTodoist(true)
-}
-
-  /* ************TOGGL FUNCTIONS************* */
-
-  /***************TOGGL GET *********************** */
-
-  const getTogglMe = async () => {
-    try {
-      await axios.get("http://localhost:5000/toggl/me").then((resp) => {
-        setTogglMe(resp.data)
-        setReadyTogglMe(true)
-      })
-  }
-  catch (err) {
-    console.log(err)
-  }
-  }
-
-  const getTogglProjects = (default_workspace_id) => {
-    try {
-      axios.get(`http://localhost:5000/toggl/projects/${default_workspace_id}`).then((resp) => {
-        setTogglProjects(resp.data);
-        setReadyTogglProjects(true);
-      })
-  }
-  catch (err) {
-    console.log(err)
-  }
-}
-
-  const getTogglTimeEntries = () => {
-    try {
-      axios.get("http://localhost:5000/toggl/timeEntries").then((resp) => {
-        setTogglTimeEntries(resp.data);
-        setReadyTogglTimeEntries(true);
-      })
-  }
-  catch (err) {
-    console.log(err)
-  }
-}
 
   const fetchTodoistAndTogglInfo = () => {
-    getTodoistData();
-    getTogglMe()
-  }
-
-  /***************TOGGL UPDATE *********************** */
-
-  const updateTogglProject = (workspaceId, projectId) => {
-    fetch(`https://api.track.toggl.com/api/v9/workspaces/${workspaceId}/projects/${projectId}`, {
-  method: "PUT",
-  body: {"active":"boolean","auto_estimates":"boolean","billable":"boolean","cid":"integer","client_id":"integer",
-  "client_name":"string","color":"string","currency":"string","end_date":"string","estimated_hours":"integer",
-  "fixed_fee":"number","is_private":"boolean","name":"string","rate":"number","rate_change_mode":"string","recurring":"boolean",
-  "recurring_parameters":{"custom_period":"integer","period":"string","project_start_date":"string"},"start_date":"string","template":"boolean","template_id":"integer"},
-  headers: {
-    "Content-Type": "application/json",
-"Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`
-  },
-})
-.then((resp) => resp.json())
-.then((json) => {
-  console.log(json);
-})
-.catch(err => console.error(err));
+    fetchAllData()
   }
 
   /* **************************************** */
 
+  //compounds projects that E both in todoist and toggl, and gets the corresponding tasks from todoist
+  const compoundedProjectsAndTasksCreator = () => {
+    var compoundedProjectsAndTasks = []; //will store the projects and corresponding tasks
+    //cycles through every toggl Project after first sorting them Asc by hours spend (first is project with 0 hours)
+    togglData?.togglProjects?.sort((a,b) => a.actual_hours-b.actual_hours).map((togglProject) => {
+      let todoistTasksMatchingTogglProject = [];
+      //cycles through todoist projects and checks if it matches the name with the toggl project, if it does, it saves the tasks and the name of project
+      //in compoundedProjectsAndTasks
+      todoistData?.forEach((todoistProject) => {
+        if(JSON.stringify(todoistProject.name.toLowerCase()) === JSON.stringify(togglProject.name.toLowerCase()))
+          todoistTasksMatchingTogglProject.push(...todoistProject.tasks)
+      })
+      if(todoistTasksMatchingTogglProject.length > 0){
+        compoundedProjectsAndTasks.push({project:togglProject, tasks:todoistTasksMatchingTogglProject})
+      }
+    })
+    console.log("CompoundedProjectsAndTasks:", compoundedProjectsAndTasks)
+    return compoundedProjectsAndTasks;
+  }
+
+  const getLeastWorkedProject = (compoundedProjectsAndTasks) => {
+    var leastWorkedProject = compoundedProjectsAndTasks[0];
+    compoundedProjectsAndTasks?.map((project) => {
+      if(project.actual_hours < leastWorkedProject.actual_hours)
+        leastWorkedProject = project;
+    })  
+    return leastWorkedProject;
+  }
+// FETCHING AND USE STATES *******************************************8
+
   //fetches data from toggl and todoist one time when app starts
   useEffect(() => {
+    //getApis();
     fetchTodoistAndTogglInfo();
    },[])
    useEffect(() => {
-    if(readyTogglMe) {
-      getTogglProjects(togglMe.default_workspace_id)
-      getTogglTimeEntries()
-      setReadyTogglMe(false)
-      setReadyAllToggl(true)
+    if(fetchingReady) {
+      setData({todoist: todoistData, toggl: {...togglData.toggl}})
     }
-   },[readyTogglMe])
-   useEffect(() => {
-    if(readyAllToggl && readyTodoist && readyTogglProjects && readyTogglTimeEntries) {
-      setData({todoist: todoistData, toggl: {togglMe: togglMe, togglProjects: togglProjects, togglTimeEntries: togglTimeEntries}})
-      setReadyAllToggl(false)
-    }
-   },[readyAllToggl, readyTodoist, readyTogglProjects, readyTogglTimeEntries])
+   },[fetchingReady])
 
-
+   
   return (
      <Router>
-       {togglMe ? console.log("TOGGL ME:", togglMe) : <></>}
-       {togglProjects ? console.log("TOGGL PROJECTS:", togglProjects) : <></>}
-       {togglTimeEntries ? console.log("TOGGL TE:", togglTimeEntries) : <></>}
-       {data ? console.log("Data in APP:", data) : <></>}
+      {console.log("DATA in component:", data)}
       <div className="bg-[#412a4c] w-full h-full mx-auto max-w-[100%] text-white">
         <div className=""><Navbar /></div>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={fetchingReady ? <Home /> : <>Loading...</>} />
           <Route path="/toggl" element={<Toggl />} />
           <Route path="/todoist" element={<Todoist />} />
           <Route path="/admin" element={<Admin />} />
