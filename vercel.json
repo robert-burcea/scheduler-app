@@ -17,7 +17,7 @@
       },
       {
       "src": "/",
-      "dest": "build/index.html"
+      "dest": "public/index.html"
       },
       {
         "handle": "filesystem"
