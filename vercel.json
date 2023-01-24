@@ -13,11 +13,14 @@
       },
       {
         "src": "/api/todoist",
-        "dest": "./server.js"
+        "dest": "server.js"
       },
       {
       "src": "/",
-      "dest": "/"
+      "dest": "build/index.html"
+      },
+      {
+        "handle": "filesystem"
       }
     ]
   }
