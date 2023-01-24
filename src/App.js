@@ -63,26 +63,94 @@ function App() {
   /* **********TODOIST FUNCTIONS************* */
 
   const fetchAllData = () => {
-    fetch(`https://scheduler-app-v2.vercel.app/api/todoist/`, {
-      headers: {
-        'Authorization':`${todoistApiKey}`
-      }
+    var togglMe = {};
+    var togglProjects = {};
+    var togglTimeEntries = {};
+    var toggl = {};
+    fetch('https://api.track.toggl.com/api/v9/me', {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`,
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+        }
     })
     .then((response) => response.json())
-    .then((todoistData) => {
-      fetch(`https://scheduler-app-v2.vercel.app/api/toggl/`, {
-        headers: {
-          'Authorization':`${togglApiKey}`
-        }
-      })
-      .then((response) => response.json())
-      .then((togglData) => {
-        setTodoistData(todoistData)
-        setTogglData(togglData)
-        setFetchingReady(true)
-      })
+    .then((data) => {
+        togglMe = data;
+        console.log(data);
+        fetch(`https://api.track.toggl.com/api/v9/workspaces/${togglMe.default_workspace_id}/projects`, {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+              "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`,
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+          }
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            togglProjects = data;
+            console.log(data);
+            fetch(`https://api.track.toggl.com/api/v9/me/time_entries`, {
+              method: 'GET',
+              mode: 'cors',
+              headers: {
+                  "Authorization": `Basic ${btoa(`${togglApiKey}:api_token`)}`,
+                  'Access-Control-Allow-Origin': '*',
+                  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+              }
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                 togglTimeEntries = data;
+                 console.log(data);
+                 toggl = ({toggl:{togglMe: togglMe, togglProjects: togglProjects, togglTimeEntries: togglTimeEntries}});
+            })
+         })
     })
+
+    const combineTodoistData = (projects, tasks) => {
+      //creates empty array that will be the modified projects 
+      //where each project will have an obj 'tasks' (the tasks corresponding to the project)
+      let newProjects = [];
+      //cicles through every project in search of tasks that belong to the current project
+      for(let i = 0; i < projects?.length; i++) {
+          //creates empty array to store found tasks
+          let project = projects[i];
+          let tasksBelongingToProject = [];
+          tasks?.forEach((task) => {
+              //if the id of the task's projectId matches the project id
+              if(task.projectId === project.id)
+              {
+                  tasksBelongingToProject.push(task)
+              }
+          })
+          project.tasks = tasksBelongingToProject;
+          newProjects.push(project)
+      }
+      return newProjects;
   }
+
+  var todoistData = [];
+  let todoistApi = new TodoistApi(todoistApiKey)
+  //fetches TODOIST projects
+  todoistApi.getProjects()
+  .then((projects) => {
+      //fetches TODOIST tasks
+      todoistApi.getTasks()
+      .then((tasks) => {
+          todoistData = combineTodoistData(projects,tasks);
+      })
+  })
+  .catch((error) => console.log(error))
+
+  setTodoistData(todoistData)
+  setTogglData(togglData)
+  setFetchingReady(true)
+
+}
 
   const fetchTodoistAndTogglInfo = () => {
     fetchAllData()
