@@ -66,7 +66,6 @@ function App() {
 
   const fetchAllData = () => {
     fetch(`http://localhost:5000/api/todoist/`, {
-      mode: 'no-cors',
       headers: {
         'Authorization':`${todoistApiKey}`
       }
@@ -74,7 +73,6 @@ function App() {
     .then((response) => response.json())
     .then((todoistData) => {
       fetch(`http://localhost:5000/api/toggl/`, {
-        mode: 'no-cors',
         headers: {
           'Authorization':`${togglApiKey}`
         }
