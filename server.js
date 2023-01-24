@@ -90,6 +90,6 @@ app.get('/api/todoist', (req,res) => {
     .catch((error) => console.log(error))
 })
 
-app.listen(8080, () => {
-    console.log(`Server running on port 8080`)
+app.listen(5000, () => {
+    console.log(`Server running on port 5000`)
 })
