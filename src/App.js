@@ -66,6 +66,7 @@ function App() {
 
   const fetchAllData = () => {
     fetch(`https://7900-93-113-182-94.eu.ngrok.io/api/todoist/`, {
+      mode: 'no-cors',
       headers: {
         'Authorization':`${todoistApiKey}`
       }
@@ -73,6 +74,7 @@ function App() {
     .then((response) => response.json())
     .then((todoistData) => {
       fetch(`https://7900-93-113-182-94.eu.ngrok.io/api/toggl/`, {
+        mode: 'no-cors',
         headers: {
           'Authorization':`${togglApiKey}`
         }
