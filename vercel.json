@@ -14,13 +14,6 @@
       {
         "src": "/api/todoist",
         "dest": "server.js"
-      },
-      {
-      "src": "/",
-      "dest": "public/index.html"
-      },
-      {
-        "handle": "filesystem"
       }
     ]
   }
