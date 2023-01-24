@@ -24,6 +24,8 @@ function App() {
   const [togglApiKey, setTogglApiKey] = useState('');
   const [todoistApiKey, setTodoistApiKey] = useState('');
   const [apisReady, setApisReady] = useState(false);
+  const [dataSet, setDataSet] = useState(false);
+  const [allReady, setAllReady] = useState(false);
   //dbData is the data fetched from firebase
   const [dbData, setDbData] = useState({})
   const [compoundedProjectsAndTasks, setCompoundedProjectsAndTasks] = useState([])
@@ -63,14 +65,14 @@ function App() {
   /* **********TODOIST FUNCTIONS************* */
 
   const fetchAllData = () => {
-    fetch(`https://scheduler-app-v2.vercel.app/api/todoist/`, {
+    fetch(`https://7900-93-113-182-94.eu.ngrok.io/api/todoist/`, {
       headers: {
         'Authorization':`${todoistApiKey}`
       }
     })
     .then((response) => response.json())
     .then((todoistData) => {
-      fetch(`https://scheduler-app-v2.vercel.app/api/toggl/`, {
+      fetch(`https://7900-93-113-182-94.eu.ngrok.io/api/toggl/`, {
         headers: {
           'Authorization':`${togglApiKey}`
         }
@@ -94,11 +96,11 @@ function App() {
   const compoundedProjectsAndTasksCreator = () => {
     var compoundedProjectsAndTasks = []; //will store the projects and corresponding tasks
     //cycles through every toggl Project after first sorting them Asc by hours spend (first is project with 0 hours)
-    togglData?.togglProjects?.sort((a,b) => a.actual_hours-b.actual_hours).map((togglProject) => {
+    data?.toggl?.togglProjects?.sort((a,b) => a.actual_hours-b.actual_hours).map((togglProject) => {
       let todoistTasksMatchingTogglProject = [];
       //cycles through todoist projects and checks if it matches the name with the toggl project, if it does, it saves the tasks and the name of project
       //in compoundedProjectsAndTasks
-      todoistData?.forEach((todoistProject) => {
+      data?.todoist?.forEach((todoistProject) => {
         if(JSON.stringify(todoistProject.name.toLowerCase()) === JSON.stringify(togglProject.name.toLowerCase()))
           todoistTasksMatchingTogglProject.push(...todoistProject.tasks)
       })
@@ -130,8 +132,16 @@ function App() {
    useEffect(() => {
     if(fetchingReady) {
       setData({todoist: todoistData, toggl: {...togglData.toggl}})
+      setDataSet(true)
     }
    },[fetchingReady])
+   useEffect(() => {
+      const compoundedProjectsAndTasks = compoundedProjectsAndTasksCreator();
+      console.log("Compounded:", compoundedProjectsAndTasks)
+      const leastWorkedProject = getLeastWorkedProject(compoundedProjectsAndTasks);
+      setData({...data, leastWorkedProject: leastWorkedProject})
+      setAllReady(true);
+   },[dataSet])
 
    
   return (
@@ -140,7 +150,7 @@ function App() {
       <div className="bg-[#412a4c] w-full h-full mx-auto max-w-[100%] text-white">
         <div className=""><Navbar /></div>
         <Routes>
-          <Route path="/" element={fetchingReady ? <Home /> : <>Loading...</>} />
+          <Route path="/" element={setAllReady ? <Home /> : <>Loading...</>} />
           <Route path="/toggl" element={<Toggl />} />
           <Route path="/todoist" element={<Todoist />} />
           <Route path="/admin" element={<Admin />} />

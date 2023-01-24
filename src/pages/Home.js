@@ -1,6 +1,7 @@
 import React from 'react'
-import Todoist from '../components/todoist/Todoist'
+import TodoistTask from '../components/todoist/TodoistTask'
 import {Toggl} from '../components/toggl/Toggl'
+import TogglProject from '../components/toggl/TogglProject'
 import {useData, useSetData} from '../GlobalContext'
 
 const togglApiKey = '77102011f8bf9ad5b1edf9f7df4fcaae'
@@ -12,7 +13,10 @@ const Home = () => {
 
   return (
     <div className="m-2">
-        <div>HOME</div>
+        <div><TogglProject project={data?.leastWorkedProject?.project}/></div>
+        <div>{data?.leastWorkedProject?.tasks?.map((task) => {
+          return <TodoistTask task={task} />
+        })}</div>
     </div>
   )
 }
