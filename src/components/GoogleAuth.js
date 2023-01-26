@@ -6,9 +6,9 @@ import { signInWithGoogle, logout } from '../firebase';
 const GoogleAuth = () => {
   const [user, setUser] = useState(null);
   
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     try {
-      const result = signInWithGoogle();
+      const result = await signInWithGoogle();
       setUser(result);
     } catch (error) {
       console.error(error);
@@ -28,7 +28,7 @@ const GoogleAuth = () => {
     <div>
       {user ? (
         <>
-          <p>Welcome, {user.displayName}</p>
+          <p>Welcome, <img className="rounded-2xl" src={user.photoURL} /> {user.displayName}</p>
           <button onClick={handleSignOut}>Sign Out</button>
         </>
       ) : (
