@@ -16,6 +16,8 @@ import {
 import Navbar from './components/Navbar';
 import Admin from './pages/Admin';
 import axios from 'axios'
+import { signInWithGoogle } from './firebase';
+import GoogleAuth from './components/GoogleAuth';
 
 function App() {
   //data and setData are the subscriptions to the Global Context
@@ -150,7 +152,7 @@ function App() {
       <div className="bg-[#412a4c] w-full h-full mx-auto max-w-[100%] text-white">
         <div className=""><Navbar /></div>
         <Routes>
-          <Route path="/" element={setAllReady ? <Home /> : <>Loading...</>} />
+          <Route path="/" element={<GoogleAuth />} />
           <Route path="/toggl" element={<Toggl />} />
           <Route path="/todoist" element={<Todoist />} />
           <Route path="/admin" element={<Admin />} />

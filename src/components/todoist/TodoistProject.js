@@ -3,10 +3,10 @@ import TodoistTask from './TodoistTask'
 
 const TodoistProject = ({data}) => {
   return (
-    <div>{data ? data?.todoist.map((project) => {
+    <div>{data ? data?.todoist?.map((project) => {
         return <div className="shadow-xl">
-            <h1 className="text-xl">{project.name}</h1>
-            {project.tasks.map((task) => {
+            <h1 className="text-xl">{project?.name}</h1>
+            {project?.tasks?.map((task) => {
                     return <TodoistTask task={task}/>
                 })}
             </div>
