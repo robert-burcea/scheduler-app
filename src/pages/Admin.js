@@ -1,8 +1,9 @@
 import React from 'react'
+import Targets from '../components/admin/Targets'
 
 const Admin = () => {
   return (
-    <div>Admin</div>
+    <div><Targets /></div>
   )
 }
 
