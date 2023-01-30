@@ -4,7 +4,8 @@ import {useData, useSetData} from '../../GlobalContext'
 const Targets = () => {
   const data = useData();
   const setData = useSetData();
-  const [togglProjectsTargets, setTogglProjectsTargets] = useState(data.toggl.togglProjects);
+  const [succesfull, setSuccesfull] = useState(false)
+  const [togglProjectsTargets, setTogglProjectsTargets] = useState(data?.toggl?.togglProjects);
 
   const handleChange = (index, value) => {
     const newData = [...togglProjectsTargets];
@@ -15,11 +16,15 @@ const Targets = () => {
     const tempData = data;
     tempData.toggl.togglProjects = togglProjectsTargets;
     setData(tempData)
+    setSuccesfull(true);
+  }
+  const dateCheck = () => {
+
   }
 
   return (
     <div>
-      {togglProjectsTargets.map((item, index) => (
+      {togglProjectsTargets?.map((item, index) => (
         <div key={index}>
           <p>{item.name}</p>
           <input
@@ -32,7 +37,13 @@ const Targets = () => {
           <p>{item.weekTarget || 0} hours/week</p>
         </div>
       ))}
-      <button className="shadow shadow-xl bg-green-300 rounded-xl p-2 m-2 hover:scale-[1.2]" onClick={updateData}>SAVE CHANGES</button>
+      <button 
+      className={succesfull ? `shadow shadow-xl bg-green-300 rounded-xl p-2 m-2 hover:scale-[1.2]` : 
+      `shadow shadow-xl bg-blue-300 rounded-xl p-2 m-2 hover:scale-[1.2]`} 
+      onClick={updateData}>
+        SAVE CHANGES
+        </button>
+        {dateCheck()}
     </div>
   );
 };

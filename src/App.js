@@ -114,6 +114,29 @@ function App() {
     return compoundedProjectsAndTasks;
   }
 
+  const calculateTimeEntriesForPast6Days = () => {
+    const projectDurations = {};
+    var data = data;
+    var togglProjects = data?.togglProjects;
+    var togglTimeEntries = data?.togglTimeEntries;
+
+    togglProjects?.forEach((project) => {
+     projectDurations[project.id] = 0;
+    });
+
+    togglTimeEntries?.forEach((timeEntry) => {
+      projectDurations[timeEntry.project_id] += timeEntry.duration;
+    });
+
+    togglProjects?.forEach((project) => {
+      project.duration = projectDurations[project.id];
+    });
+
+    data.togglProjects = togglProjects;
+    setData(data);
+    console.log(togglProjects);
+  }
+
   const getLeastWorkedProject = (compoundedProjectsAndTasks) => {
     var leastWorkedProject = compoundedProjectsAndTasks[0];
     compoundedProjectsAndTasks?.map((project) => {
@@ -138,6 +161,7 @@ function App() {
     }
    },[fetchingReady])
    useEffect(() => {
+      calculateTimeEntriesForPast6Days()
       const compoundedProjectsAndTasks = compoundedProjectsAndTasksCreator();
       console.log("Compounded:", compoundedProjectsAndTasks)
       const leastWorkedProject = getLeastWorkedProject(compoundedProjectsAndTasks);

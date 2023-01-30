@@ -34,9 +34,15 @@ app.get('/api/toggl', (req, res) => {
         })
         .then((response) => response.json())
         .then((data) => {
+            var daySixDaysAgo = new Date();
+            daySixDaysAgo.setDate(daySixDaysAgo.getDate() - 6);
+            var start_date = '' + daySixDaysAgo.getFullYear() + '-' + daySixDaysAgo.getMonth() +1 + '-' + daySixDaysAgo.getDate();
+            var now = new Date();
+            now.setDate(now.getDate() + 1)
+            var end_date = '' + now.getFullYear() + '-' + now.getMonth() +1 + '-' + now.getDate();
             togglProjects = data;
             console.log(data);
-            fetch(`https://api.track.toggl.com/api/v9/me/time_entries`, {
+            fetch(`https://api.track.toggl.com/api/v9/me/time_entries?start_date=${start_date}&end_date=${end_date}`, {
                 headers: {
                  "Authorization": `Basic ${Buffer.from(`${togglApiKey}:api_token`).toString('base64')}`
                 }
