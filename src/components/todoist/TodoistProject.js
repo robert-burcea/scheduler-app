@@ -3,11 +3,11 @@ import TodoistTask from './TodoistTask'
 
 const TodoistProject = ({data}) => {
   return (
-    <div>{data ? data?.todoist?.map((project) => {
-        return <div className="shadow-xl">
+    <div>{data ? data?.todoist?.map((project, index) => {
+        return <div className="shadow-xl" key={index}>
             <h1 className="text-xl">{project?.name}</h1>
-            {project?.tasks?.map((task) => {
-                    return <TodoistTask task={task}/>
+            {project?.tasks?.map((task, index) => {
+                    return <TodoistTask task={task} key={index}/>
                 })}
             </div>
         }) : <></>}</div>

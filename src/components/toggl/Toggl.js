@@ -21,8 +21,8 @@ const Toggl = () => {
         return (
           <div>
             <TogglProject project={togglProject}/>
-            {todoistTasksMatchingTogglProject?.map((task) => {
-              return <TodoistTask task={task}/>
+            {todoistTasksMatchingTogglProject?.map((task, index) => {
+              return <TodoistTask task={task} key={index}/>
             })}
           </div>
         )
