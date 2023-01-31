@@ -12,14 +12,14 @@ const Toggl = () => {
     <div>
       {/* it firsts sorts the projects, min hours spent to max hours spent on it, then maps it */}
       {console.log("DATA IN TOGGL COMPONENT:", data)}
-      {data ? data?.toggl?.togglProjects?.sort((a,b) => a.actual_hours-b.actual_hours).map((togglProject) => {
+      {data ? data?.toggl?.togglProjects?.sort((a,b) => a.actual_hours-b.actual_hours).map((togglProject, index) => {
         let todoistTasksMatchingTogglProject = [];
         data?.todoist?.forEach((todoistProject) => {
           if(todoistProject.name.toLowerCase() === togglProject.name.toLowerCase())
             todoistTasksMatchingTogglProject.push(...todoistProject.tasks)
         })
         return (
-          <div>
+          <div key={index}>
             <TogglProject project={togglProject}/>
             {todoistTasksMatchingTogglProject?.map((task, index) => {
               return <TodoistTask task={task} key={index}/>

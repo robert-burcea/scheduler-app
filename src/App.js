@@ -140,7 +140,7 @@ function App() {
   const getLeastWorkedProject = (compoundedProjectsAndTasks) => {
     var leastWorkedProject = compoundedProjectsAndTasks[0];
     compoundedProjectsAndTasks?.map((project) => {
-      if(project.actual_hours < leastWorkedProject.actual_hours)
+      if(project?.weekTarget - project?.calculatedDuration/60/60 > leastWorkedProject?.weekTarget - leastWorkedProject?.calculatedDuration/60/60)
         leastWorkedProject = project;
     })  
     return leastWorkedProject;
@@ -162,13 +162,8 @@ function App() {
     }
    },[fetchingReady])
    useEffect(() => {
-      const compoundedProjectsAndTasks = compoundedProjectsAndTasksCreator();
-      console.log("Compounded:", compoundedProjectsAndTasks)
-      const leastWorkedProject = getLeastWorkedProject(compoundedProjectsAndTasks);
-      setData({...data, leastWorkedProject: leastWorkedProject})
       setAllReady(true);
    },[dataSet])
-
    
   return (
      <Router>
@@ -176,7 +171,7 @@ function App() {
       <div className="bg-[#412a4c] w-full h-full mx-auto max-w-[100%] text-white">
         <div className=""><Navbar /></div>
         <Routes>
-          <Route path="/" element={<GoogleAuth />} />
+          <Route path="/" element={<><GoogleAuth /><Home /></>} />
           <Route path="/toggl" element={<Toggl />} />
           <Route path="/todoist" element={<Todoist />} />
           <Route path="/admin" element={<Admin />} />

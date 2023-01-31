@@ -36,10 +36,11 @@ app.get('/api/toggl', (req, res) => {
         .then((data) => {
             var daySixDaysAgo = new Date();
             daySixDaysAgo.setDate(daySixDaysAgo.getDate() - 6);
-            var start_date = '' + daySixDaysAgo.getFullYear() + '-' + daySixDaysAgo.getMonth() +1 + '-' + daySixDaysAgo.getDate();
+            var start_date = daySixDaysAgo.toISOString().substr(0, 10);
             var now = new Date();
-            now.setDate(now.getDate() + 1)
-            var end_date = '' + now.getFullYear() + '-' + now.getMonth() +1 + '-' + now.getDate();
+            //activate below line to get time entries from today also, however, if a time entry is currently active, issues will arise
+            //now.setDate(now.getDate() + 1)
+            var end_date = now.toISOString().substr(0, 10);
             togglProjects = data;
             console.log(data);
             fetch(`https://api.track.toggl.com/api/v9/me/time_entries?start_date=${start_date}&end_date=${end_date}`, {

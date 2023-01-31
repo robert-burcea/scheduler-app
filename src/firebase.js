@@ -54,6 +54,33 @@ const logout = () => {
   signOut(auth);
 };
 
+const updateFirebaseWeekTargets = async (user, weekTargets) => {
+  try {
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+const docs = await getDocs(q);
+if (docs.docs.length > 0) {
+  const docRef = docs.docs[0].ref;
+  console.log(docRef)
+  await docRef.update({
+    name: user.displayName,
+    authProvider: "google",
+    email: user.email,
+    weekTargets: weekTargets
+  });
+} else {
+  await addDoc(collection(db, "users"), {
+    uid: user.uid,
+    name: user.displayName,
+    authProvider: "google",
+    email: user.email,
+    weekTargets: weekTargets
+  });
+}
+  } catch (err) {
+    console.log("Error updating weekTargets", err);
+  }
+};
+
 export {
   auth,
   db,
@@ -61,4 +88,5 @@ export {
   logout,
 };
 export { app }
+export {updateFirebaseWeekTargets}
 export default db;
