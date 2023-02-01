@@ -14,8 +14,8 @@ const Home = () => {
   return (
     <div className="m-2">
         <div><TogglProject project={data?.leastWorkedProject?.project}/></div>
-        <div>{data?.leastWorkedProject?.tasks?.map((task) => {
-          return <TodoistTask task={task} />
+        <div>{data?.leastWorkedProject?.tasks?.map((task, index) => {
+          return <TodoistTask task={task} key={index}/>
         })}</div>
     </div>
   )

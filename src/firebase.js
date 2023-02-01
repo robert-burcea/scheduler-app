@@ -9,7 +9,7 @@ import {
  signOut,
  } from "firebase/auth";
 import { 
-    getFirestore, collection, query, getDocs, where, addDoc
+    getFirestore, collection, query, getDocs, where, addDoc, updateDoc
   } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -57,25 +57,15 @@ const logout = () => {
 const updateFirebaseWeekTargets = async (user, weekTargets) => {
   try {
     const q = query(collection(db, "users"), where("uid", "==", user.uid));
-const docs = await getDocs(q);
-if (docs.docs.length > 0) {
-  const docRef = docs.docs[0].ref;
-  console.log(docRef)
-  await docRef.update({
-    name: user.displayName,
-    authProvider: "google",
-    email: user.email,
-    weekTargets: weekTargets
-  });
-} else {
-  await addDoc(collection(db, "users"), {
-    uid: user.uid,
-    name: user.displayName,
-    authProvider: "google",
-    email: user.email,
-    weekTargets: weekTargets
-  });
-}
+    const docs = await getDocs(q);
+    const docRef = docs.docs[0].ref;
+    console.log(docRef)
+    await updateDoc(docRef, {
+     name: user.displayName,
+     authProvider: "google",
+     email: user.email,
+     weekTargets: weekTargets
+   });
   } catch (err) {
     console.log("Error updating weekTargets", err);
   }
