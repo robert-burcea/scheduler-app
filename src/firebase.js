@@ -9,7 +9,8 @@ import {
  signOut,
  } from "firebase/auth";
 import { 
-    getFirestore, collection, query, getDocs, where, addDoc, updateDoc
+    getFirestore, collection, query, onSnapshot, doc, 
+    setDoc, getDocs, where, addDoc, updateDoc
   } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -29,6 +30,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
+
 const signInWithGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
@@ -43,8 +45,11 @@ const signInWithGoogle = async () => {
         authProvider: "google",
         email: user.email,
       });
+      return user;
+    } else {
+      let weekTargets = firebaseFetch(user.uid);
+      return {...user, weekTargets: weekTargets};
     }
-    return user;
   } catch (err) {
     console.error(err);
     alert(err.message);
@@ -53,6 +58,23 @@ const signInWithGoogle = async () => {
 const logout = () => {
   signOut(auth);
 };
+
+const firebaseFetch = (userId) => {
+        
+  const colRef = collection(db, 'users');
+  const queryRef = query(collection(db, "users"), where("uid", "==", userId));
+
+  onSnapshot(queryRef, (snapshot) => {
+      let dbCopy = null;
+      console.log(snapshot.docs)
+      snapshot.docs.forEach((doc) => {
+        dbCopy = doc.data();
+      })
+      console.log('What i get:',dbCopy.weekTargets);
+      return dbCopy.weekTargets;
+  })
+}
+
 
 const updateFirebaseWeekTargets = async (user, weekTargets) => {
   try {
