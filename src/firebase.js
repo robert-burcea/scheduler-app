@@ -47,7 +47,7 @@ const signInWithGoogle = async () => {
       });
       return user;
     } else {
-      let weekTargets = firebaseFetch(user.uid);
+      const weekTargets = firebaseFetch(user.uid);
       return {...user, weekTargets: weekTargets};
     }
   } catch (err) {
