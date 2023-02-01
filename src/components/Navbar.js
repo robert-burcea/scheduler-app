@@ -6,15 +6,24 @@ import {BsFillPersonLinesFill} from 'react-icons/bs'
 import { AiFillHome } from "react-icons/ai";
 import { SiTodoist, SiToggl } from "react-icons/si";
 import { BiUserCircle } from "react-icons/bi";
+import userEvent from "@testing-library/user-event";
+import {useData, useSetData} from '../GlobalContext'
+import 'firebase/auth';
+import { signInWithGoogle, logout } from '../firebase';
 
-const Navbar = () => {
-
+const Navbar = ({user, handleSignOut, setIsLoggedIn, isLoggedIn}) => {
+    const data = useData();
+    const setData = useSetData();
     const [nav, setNav] = useState(false);
-
+    
   return (
     <div className="w-full h-20 shadow-xl bg-[#220a2e] z-[100]">
         <div className="flex justify-between items-center w-full h-full px-2 2xl:px-16">
             <h1>SCHEDULER</h1>
+            {isLoggedIn && (<div className="text-center">
+              <p>Welcome, {user?.displayName}</p>
+              <button onClick={handleSignOut}>Sign Out</button>
+            </div>)}
             <div>
             <ul className="hidden md:flex">
             <Link
@@ -88,7 +97,8 @@ const Navbar = () => {
         to="/admin"
         className="text-xl shadow-xl rounded-xl m-1 hover:scale-[90%] md:hover:scale-[110%]"
       >
-        <BiUserCircle size={35} className="ml-[130%]" />
+        <img className="rounded-xl" src={user?.photoURL} /> 
+        {/*<BiUserCircle size={35} className="ml-[130%]" />*/}
       </Link>
                     </ul>
                 </div>

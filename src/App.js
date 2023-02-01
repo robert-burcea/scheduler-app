@@ -15,14 +15,16 @@ import {
   import { TodoistApi } from "@doist/todoist-api-typescript"
 import Navbar from './components/Navbar';
 import Admin from './pages/Admin';
-import axios from 'axios'
-import { signInWithGoogle } from './firebase';
 import GoogleAuth from './components/GoogleAuth';
+import 'firebase/auth';
+import { signInWithGoogle, logout } from './firebase';
 
 function App() {
   //data and setData are the subscriptions to the Global Context
   const data = useData();
   const setData = useSetData();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null)
   const [togglApiKey, setTogglApiKey] = useState('');
   const [todoistApiKey, setTodoistApiKey] = useState('');
   const [apisReady, setApisReady] = useState(false);
@@ -36,6 +38,27 @@ function App() {
   const [fetchingReady, setFetchingReady] = useState(false)
     //if the TODOIST AND TOGGL DATA WAS FETCHED, ready triggers the FIREBASE UPDATE WITH THE DATA
 
+
+    const handleSignIn = async () => {
+      try {
+        const result = await signInWithGoogle();
+        setUser(result);
+        setData({...data, user: result})
+        setIsLoggedIn(true)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    const handleSignOut = async () => {
+      try {
+        logout();
+        setIsLoggedIn(false)
+        setUser(null);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
     const getApis = () => {
     let togglApiKey = prompt("Insert Toggl API:")
@@ -157,24 +180,41 @@ function App() {
    useEffect(() => {
     if(fetchingReady) {
       calculateTimeEntriesForPast6Days()
-      setData({todoist: todoistData, toggl: {...togglData.toggl}})
+      setData({...data, todoist: todoistData, toggl: {...togglData.toggl}})
       setDataSet(true)
     }
    },[fetchingReady])
    useEffect(() => {
       setAllReady(true);
    },[dataSet])
+   useEffect(() => {
+    if(data?.user) {
+      setUser(data.user)
+      console.log("SET THE USER STATE")
+    }
+   },[data])
    
   return (
      <Router>
       {console.log("DATA in component:", data)}
       <div className="bg-[#412a4c] w-full h-full mx-auto max-w-[100%] text-white">
-        <div className=""><Navbar /></div>
+        <div className=""><Navbar user={user} handleSignOut={handleSignOut} setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn}/></div>
         <Routes>
-          <Route path="/" element={<><GoogleAuth /><Home /></>} />
-          <Route path="/toggl" element={<Toggl />} />
-          <Route path="/todoist" element={<Todoist />} />
-          <Route path="/admin" element={<Admin />} />
+          {isLoggedIn ? (
+            <>
+              <Route path="/" element={<Home />} />
+              <Route path="/toggl" element={<Toggl />} />
+              <Route path="/todoist" element={<Todoist />} />
+              <Route path="/admin" element={<Admin />} />
+            </>
+          ) : (
+            <>
+              <Route path="/" element ={<GoogleAuth handleSignIn={handleSignIn} handleSignOut={handleSignOut}/>} />
+              <Route path="/toggl" element ={<GoogleAuth handleSignIn={handleSignIn} handleSignOut={handleSignOut}/>} />
+              <Route path="/todoist" element ={<GoogleAuth handleSignIn={handleSignIn} handleSignOut={handleSignOut}/>} />
+              <Route path="/admin" element ={<GoogleAuth handleSignIn={handleSignIn} handleSignOut={handleSignOut}/>} />
+            </>
+          )}
         </Routes>
       </div>
     </Router>
