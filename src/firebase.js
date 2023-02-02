@@ -47,8 +47,7 @@ const signInWithGoogle = async () => {
       });
       return user;
     } else {
-      const weekTargets = firebaseFetch(user.uid);
-      return {...user, weekTargets: weekTargets};
+      return user;
     }
   } catch (err) {
     console.error(err);
@@ -100,5 +99,5 @@ export {
   logout,
 };
 export { app }
-export {updateFirebaseWeekTargets}
+export {updateFirebaseWeekTargets, firebaseFetch}
 export default db;

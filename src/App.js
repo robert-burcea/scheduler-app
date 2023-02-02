@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import Home from './pages/Home';
 import {useData, useSetData} from './GlobalContext'
-import db from './firebase'
+import db, { firebaseFetch } from './firebase'
 import { 
     collection, onSnapshot, doc, setDoc, updateDoc
   } from 'firebase/firestore'
@@ -183,7 +183,8 @@ function App() {
    useEffect(() => {
     if(fetchingReady) {
       calculateTimeEntriesForPast6Days()
-      setData({...data, todoist: todoistData, toggl: {...togglData.toggl}})
+      const weekTargets = firebaseFetch(data?.user?.uid);
+      setData({...data, todoist: todoistData, toggl: {...togglData.toggl}, weekTargets: weekTargets})
       setDataSet(true)
     }
    },[fetchingReady])
