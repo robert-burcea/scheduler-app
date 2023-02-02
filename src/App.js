@@ -177,6 +177,7 @@ function App() {
     //getApis();
    },[])
     useEffect(() => {
+      if(apisReady)
     fetchTodoistAndTogglInfo();
    },[apisReady])
    useEffect(() => {
