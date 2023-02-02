@@ -23,7 +23,7 @@ const Targets = () => {
 
   const createWeekTargetsArray = () => {
     var newWeekTargets = []
-    togglProjectsTargets.forEach((project, index) => {
+    togglProjectsTargets?.forEach((project, index) => {
       newWeekTargets[index] = {id: project.id, name: project.name}
     })
     setWeekTargets(newWeekTargets);

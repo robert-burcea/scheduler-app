@@ -45,6 +45,7 @@ function App() {
         setUser(result);
         setData({...data, user: result})
         setIsLoggedIn(true)
+        getApis();
       } catch (error) {
         console.error(error);
       }
@@ -54,6 +55,7 @@ function App() {
       try {
         logout();
         setIsLoggedIn(false)
+        setData(null)
         setUser(null);
       } catch (error) {
         console.error(error);
@@ -172,7 +174,7 @@ function App() {
 
   //fetches data from toggl and todoist one time when app starts
   useEffect(() => {
-    getApis();
+    //getApis();
    },[])
     useEffect(() => {
     fetchTodoistAndTogglInfo();
@@ -197,12 +199,12 @@ function App() {
   return (
      <Router>
       {console.log("DATA in component:", data)}
-      <div className="bg-[#412a4c] w-full h-full mx-auto max-w-[100%] text-white">
+      <div className="bg-[#412a4c] w-full h-[100%] mx-auto max-w-[100%] text-white">
         <div className=""><Navbar user={user} handleSignOut={handleSignOut} setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn}/></div>
         <Routes>
           {isLoggedIn ? (
             <>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Home dataSet={dataSet}/>} />
               <Route path="/toggl" element={<Toggl />} />
               <Route path="/todoist" element={<Todoist />} />
               <Route path="/admin" element={<Admin />} />
