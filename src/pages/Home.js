@@ -11,13 +11,15 @@ const Home = ({dataSet}) => {
 
   return (
     <div className="m-2">
-      {dataSet ? 
+      {dataSet ? data?.leastWorkedProject ?
       <div>
+        <div className="text-lg flex flex-col items-center m-5">You should work on this now</div>
         <div><TogglProject project={data?.leastWorkedProject?.project}/></div>
         <div>{data?.leastWorkedProject?.tasks?.map((task, index) => {
           return <TodoistTask task={task} key={index}/>
         })}</div>
-      </div> : 
+      </div> : <div className="text-lg flex flex-col items-center m-5">Set the week targets in the admin page</div>
+      : 
       <div className="flex flex-col items-center m-10">
         
         <h2 className="mb-2 text-lg font-semibold text-white dark:text-white">Preparing your workspace</h2>
