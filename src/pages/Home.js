@@ -13,7 +13,7 @@ const Home = ({dataSet}) => {
     <div className="m-2">
       {dataSet ? data?.leastWorkedProject ?
       <div>
-        <div className="text-lg flex flex-col items-center m-5">You should work on this now</div>
+        <div className="text-lg flex flex-col items-center m-5">Based on your last 6 days activity and your week targets, you should work on this now</div>
         <div><TogglProject project={data?.leastWorkedProject?.project}/></div>
         <div>{data?.leastWorkedProject?.tasks?.map((task, index) => {
           return <TodoistTask task={task} key={index}/>
