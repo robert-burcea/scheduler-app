@@ -167,8 +167,8 @@ function App() {
     compoundedProjectsAndTasks?.map((project) => {
       const weekTargetsArrayIndexOfProject = data?.user?.weekTargets?.findIndex(obj => obj.id === project.id)
       const weekTargetsArrayIndexOfLeastWorkedProject = data?.user?.weekTargets?.findIndex(obj => obj.id === leastWorkedProject.id)
-      if(data?.user?.weekTargets[weekTargetsArrayIndexOfProject]?.weekTarget - project?.calculatedDuration/60/60 || 0 > 
-      data?.user?.weekTargets[weekTargetsArrayIndexOfLeastWorkedProject]?.weekTarget - leastWorkedProject?.calculatedDuration/60/60 || 0)
+      if(data?.user?.weekTargets[weekTargetsArrayIndexOfProject]?.weekTarget - project?.project?.calculatedDuration/60/60 > 
+      data?.user?.weekTargets[weekTargetsArrayIndexOfLeastWorkedProject]?.weekTarget - leastWorkedProject?.project?.calculatedDuration/60/60)
         leastWorkedProject = project;
     })  
     return leastWorkedProject;
@@ -191,9 +191,11 @@ function App() {
     }
    },[fetchingReady])
    useEffect(() => {
+    if(data?.user?.weekTargets?.length > 0) {
       const compoundedProjectsAndTasks = compoundedProjectsAndTasksCreator();
       const leastWorkedProject = getLeastWorkedProject(compoundedProjectsAndTasks);
       setData({...data, leastWorkedProject: leastWorkedProject, reload: false})
+    }
       setAllReady(true);
    },[dataSet])
    useEffect(() => {
