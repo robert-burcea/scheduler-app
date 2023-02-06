@@ -165,11 +165,23 @@ function App() {
   const getLeastWorkedProject = (compoundedProjectsAndTasks) => {
     var leastWorkedProject = compoundedProjectsAndTasks[0];
     compoundedProjectsAndTasks?.map((project) => {
-      const weekTargetsArrayIndexOfProject = data?.user?.weekTargets?.findIndex(obj => obj.id === project.id)
-      const weekTargetsArrayIndexOfLeastWorkedProject = data?.user?.weekTargets?.findIndex(obj => obj.id === leastWorkedProject.id)
-      if(data?.user?.weekTargets[weekTargetsArrayIndexOfProject]?.weekTarget - project?.project?.calculatedDuration/60/60 > 
-      data?.user?.weekTargets[weekTargetsArrayIndexOfLeastWorkedProject]?.weekTarget - leastWorkedProject?.project?.calculatedDuration/60/60)
+      const weekTargetObjectOfProject = data?.user?.weekTargets?.find(obj => obj.id === project.project.id)
+      const weekTargetObjectOfLeastWorkedProject = data?.user?.weekTargets?.find(obj => obj.id === leastWorkedProject.project.id)
+      if(weekTargetObjectOfProject?.weekTarget - project?.project?.calculatedDuration/60/60 > 
+      weekTargetObjectOfLeastWorkedProject?.weekTarget - leastWorkedProject?.project?.calculatedDuration/60/60)
         leastWorkedProject = project;
+      const logger = {
+        projectName: project?.project?.name,
+        currentLeastWorkedProjectName: leastWorkedProject?.project?.name,
+        weekTargetObjectOfProject: weekTargetObjectOfProject,
+        weekTargetObjectOfLeastWorkedProject: weekTargetObjectOfLeastWorkedProject,
+        projectWeekTarget: weekTargetObjectOfProject?.weekTarget,
+        projectCalculatedDuration: project?.project?.calculatedDuration/60/60,
+        currentLeastWorkedProjectWeekTarget: weekTargetObjectOfLeastWorkedProject?.weekTarget,
+        currentLeastWorkedProjectCalculatedDuration: leastWorkedProject?.project?.calculatedDuration/60/60
+      } 
+      console.table(logger)
+      console.table(data?.user?.weekTargets)
     })  
     return leastWorkedProject;
   }
