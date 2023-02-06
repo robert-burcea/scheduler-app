@@ -183,8 +183,7 @@ function App() {
    useEffect(() => {
     if(fetchingReady) {
       calculateTimeEntriesForPast6Days()
-      const weekTargets = firebaseFetch(data?.user?.uid);
-      setData({...data, todoist: todoistData, toggl: {...togglData.toggl}, weekTargets: weekTargets})
+      setData({...data, todoist: todoistData, toggl: {...togglData.toggl}})
       setDataSet(true)
     }
    },[fetchingReady])

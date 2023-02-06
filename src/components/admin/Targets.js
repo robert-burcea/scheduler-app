@@ -7,37 +7,34 @@ const Targets = () => {
   const data = useData();
   const setData = useSetData();
   const [succesfull, setSuccesfull] = useState(false)
-  const [weekTargets, setWeekTargets] = useState(data?.user?.weekTargets || [])
+  const [weekTargetsFromFirebase, setWeekTargetsFromFirebase] = useState(data?.user?.weekTargets || [])
   const [firebaseTargets, setFirebaseTargets] = useState(data?.user?.weekTargets || null)
-  const [togglProjectsTargets, setTogglProjectsTargets] = useState(data?.toggl?.togglProjects);
+  const [togglProjectsReceived, setTogglProjectsReceived] = useState(data?.toggl?.togglProjects);
 
   const handleChange = (index, value) => {
-    const newData = [...togglProjectsTargets];
-    const newWeekTargets = [...weekTargets];
-    newData[index].weekTarget = value;
-    const weekTargetIndex = newWeekTargets.findIndex(obj => obj.id === newData[index].id)
-    newWeekTargets[weekTargetIndex].weekTarget = value;
-    setTogglProjectsTargets(newData);
-    setWeekTargets(newWeekTargets);
+    const newWeekTargets = [...weekTargetsFromFirebase];
+    //const weekTargetIndex = newWeekTargets.findIndex(obj => obj.id === newCalculatedTargets[index].id)
+    newWeekTargets[index].weekTarget = value;
+    setWeekTargetsFromFirebase(newWeekTargets);
   };
 
   const createWeekTargetsArray = () => {
     var newWeekTargets = []
-    togglProjectsTargets?.forEach((project, index) => {
-      newWeekTargets[index] = {id: project.id, name: project.name}
+    togglProjectsReceived?.forEach((project, index) => {
+      newWeekTargets[index] = {id: project.id, name: project.name, weekTarget: 0}
     })
-    setWeekTargets(newWeekTargets);
+    setWeekTargetsFromFirebase(newWeekTargets);
   }
 
   const updateData = () => {
     const tempData = data;
-    tempData.toggl.weekTargets = togglProjectsTargets;
+    tempData.user.weekTargets = togglProjectsReceived;
     tempData.reload = true;
     const compoundedProjectsAndTasks = compoundedProjectsAndTasksCreator();
     console.log("Compounded:", compoundedProjectsAndTasks)
     const leastWorkedProject = getLeastWorkedProject(compoundedProjectsAndTasks);
     setData({...tempData, leastWorkedProject: leastWorkedProject, reload: false})
-    updateFirebaseWeekTargets(data.user, weekTargets);
+    updateFirebaseWeekTargets(data.user, weekTargetsFromFirebase);
     setSuccesfull(true);
   }
     //compounds projects that E both in todoist and toggl, and gets the corresponding tasks from todoist
@@ -76,23 +73,23 @@ const Targets = () => {
   }
 
   useEffect(() => {
-    if(!data?.user?.weekTargets)
+    if(data?.user?.weekTargets.length === 0)
       createWeekTargetsArray()
   },[])
 
   return (
     <div>
-      {togglProjectsTargets?.map((item, index) => (
+      {weekTargetsFromFirebase?.map((item, index) => (
         <div key={index}>
           <p>{item.name}</p>
           <input
             type="range"
             min="0"
             max="100"
-            value={item.weekTarget || 0}
+            value={item.weekTarget}
             onChange={event => handleChange(index, event.target.value)}
           />
-          <p>{item.weekTarget || 0} hours/week</p>
+          <p>{item.weekTarget} hours/week</p>
         </div>
       ))}
       <button 

@@ -34,20 +34,28 @@ const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
-    const user = res.user;
+    var user = res.user;
+    var firebaseUser = {};
     console.log(user)
     const q = query(collection(db, "users"), where("uid", "==", user.uid));
     const docs = await getDocs(q);
     if (docs.docs.length === 0) {
-      await addDoc(collection(db, "users"), {
+      firebaseUser = {
         uid: user.uid,
-        name: user.displayName,
+        displayName: user.displayName,
         authProvider: "google",
         email: user.email,
+        photoURL: user.photoURL,
+        weekTargets: []
+      }
+      await addDoc(collection(db, "users"), {
+        ...firebaseUser
       });
-      return user;
+      return firebaseUser;
     } else {
-      return user;
+      firebaseUser = docs.docs[0].data();
+      console.log("firebase.js firebaseUser:", firebaseUser)
+      return firebaseUser;
     }
   } catch (err) {
     console.error(err);
@@ -70,7 +78,7 @@ const firebaseFetch = (userId) => {
         dbCopy = doc.data();
       })
       console.log('What i get:',dbCopy.weekTargets);
-      return dbCopy.weekTargets;
+      return dbCopy;
   })
 }
 
@@ -82,9 +90,10 @@ const updateFirebaseWeekTargets = async (user, weekTargets) => {
     const docRef = docs.docs[0].ref;
     console.log(docRef)
     await updateDoc(docRef, {
-     name: user.displayName,
+     displayName: user.displayName,
      authProvider: "google",
      email: user.email,
+     photoURL: user.photoURL,
      weekTargets: weekTargets
    });
   } catch (err) {

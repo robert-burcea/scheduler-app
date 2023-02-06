@@ -18,6 +18,7 @@ const Navbar = ({user, handleSignOut, setIsLoggedIn, isLoggedIn}) => {
     
   return (
     <div className="w-full h-20 shadow-xl bg-[#220a2e] z-[100]">
+      {console.log("User in navbar:", user)}
         <div className="flex justify-between items-center w-full h-full px-2 2xl:px-16">
             <h1>SCHEDULER
             {isLoggedIn && (<div className="">
