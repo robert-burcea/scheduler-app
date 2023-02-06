@@ -208,7 +208,10 @@ function App() {
               <Route path="/" element={<Home dataSet={dataSet}/>} />
               <Route path="/toggl" element={<Toggl />} />
               <Route path="/todoist" element={<Todoist />} />
-              <Route path="/admin" element={<Admin />} />
+              <Route path="/admin" element={<Admin 
+              compoundedProjectsAndTasksCreator={compoundedProjectsAndTasksCreator}
+              getLeastWorkedProject={getLeastWorkedProject}
+              />} />
             </>
           ) : (
             <>

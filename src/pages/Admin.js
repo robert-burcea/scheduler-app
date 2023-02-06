@@ -1,9 +1,12 @@
 import React from 'react'
 import Targets from '../components/admin/Targets'
 
-const Admin = () => {
+const Admin = ({compoundedProjectsAndTasksCreator, getLeastWorkedProject}) => {
   return (
-    <div><Targets /></div>
+    <div><Targets 
+              compoundedProjectsAndTasksCreator={compoundedProjectsAndTasksCreator}
+              getLeastWorkedProject={getLeastWorkedProject}
+    /></div>
   )
 }
 
