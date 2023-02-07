@@ -1,4 +1,5 @@
 import React from 'react'
+import Chart from '../components/Chart'
 import TodoistTask from '../components/todoist/TodoistTask'
 import {Toggl} from '../components/toggl/Toggl'
 import TogglProject from '../components/toggl/TogglProject'
@@ -18,6 +19,9 @@ const Home = ({dataSet}) => {
         <div>{data?.leastWorkedProject?.tasks?.map((task, index) => {
           return <TodoistTask task={task} key={index}/>
         })}</div>
+        <div>
+          <Chart hoursSpent={data?.leastWorkedProject?.hoursSpent} targetHours={data?.leastWorkedProject?.targetHours}/>
+        </div>
       </div> : <div className="text-lg flex flex-col items-center m-5">Set the week targets in the admin page</div>
       : 
       <div className="flex flex-col items-center m-10">

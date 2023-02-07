@@ -168,8 +168,11 @@ function App() {
       const weekTargetObjectOfProject = data?.user?.weekTargets?.find(obj => obj.id === project.project.id)
       const weekTargetObjectOfLeastWorkedProject = data?.user?.weekTargets?.find(obj => obj.id === leastWorkedProject.project.id)
       if(weekTargetObjectOfProject?.weekTarget - project?.project?.calculatedDuration/60/60 > 
-      weekTargetObjectOfLeastWorkedProject?.weekTarget - leastWorkedProject?.project?.calculatedDuration/60/60)
+      weekTargetObjectOfLeastWorkedProject?.weekTarget - leastWorkedProject?.project?.calculatedDuration/60/60){
+        project.hoursSpent = project?.project?.calculatedDuration/60/60;
+        project.targetHours = weekTargetObjectOfProject?.weekTarget;
         leastWorkedProject = project;
+      }
       const logger = {
         projectName: project?.project?.name,
         currentLeastWorkedProjectName: leastWorkedProject?.project?.name,
@@ -184,6 +187,10 @@ function App() {
       console.table(data?.user?.weekTargets)
     })  
     return leastWorkedProject;
+  }
+
+  const calculateProjectsPercentageOfCompletion = (compoundedProjectsAndTasks) => {
+
   }
 // FETCHING AND USE STATES *******************************************8
 

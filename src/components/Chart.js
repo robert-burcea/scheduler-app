@@ -1,8 +1,11 @@
 import React from 'react';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from 'react-chartjs-2';
 
 const Chart = ({ hoursSpent, targetHours }) => {
   const percentage = (hoursSpent / targetHours) * 100;
+
+  ChartJS.register(ArcElement, Tooltip, Legend);
 
   const data = {
     datasets: [{
@@ -19,13 +22,16 @@ const Chart = ({ hoursSpent, targetHours }) => {
     labels: [
       'Hours Spent',
       'Hours Left'
-    ]
+    ],
+    options: {
+        cutout: 10
+    }
   };
 
   return (
     <div>
-      <Doughnut data={data} />
-      <p>{percentage.toFixed(2)}% of target reached</p>
+      <p className="text-lg flex flex-col items-center m-5">{percentage.toFixed(2)}% of target reached</p>
+      <Doughnut data={data}/>
     </div>
   );
 };
