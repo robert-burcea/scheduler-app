@@ -22,16 +22,18 @@ const Chart = ({ hoursSpent, targetHours }) => {
     labels: [
       'Hours Spent',
       'Hours Left'
-    ],
-    options: {
-        cutout: 10
-    }
+    ]
+  };
+  const options = {
+    maintainAspectRatio: false,
+    responsive: true,
+    cutoutPercentage: 20,
   };
 
   return (
     <div>
-      <p className="text-lg flex flex-col items-center m-5">{percentage.toFixed(2)}% of target reached</p>
-      <Doughnut data={data}/>
+      <p className="text-lg flex flex-col items-center">{percentage.toFixed(2)}% of target reached</p>
+      <Doughnut data={data} options={options} />
     </div>
   );
 };
