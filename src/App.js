@@ -92,14 +92,14 @@ function App() {
   /* **********TODOIST FUNCTIONS************* */
 
   const fetchAllData = () => {
-    fetch(`http://localhost:5000/api/todoist/`, {
+    fetch(`https://main.d1yx0xm55m2bff.amplifyapp.com:5000/api/todoist/`, {
       headers: {
         'Authorization':`${todoistApiKey}`
       }
     })
     .then((response) => response.json())
     .then((todoistData) => {
-      fetch(`http://localhost:5000/api/toggl/`, {
+      fetch(`https://main.d1yx0xm55m2bff.amplifyapp.com:5000/api/toggl/`, {
         headers: {
           'Authorization':`${togglApiKey}`
         }
