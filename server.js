@@ -35,7 +35,7 @@ app.get('/api/toggl', (req, res) => {
         .then((response) => response.json())
         .then((data) => {
             var day21DaysAgo = new Date();
-            day21DaysAgo.setDate(day21DaysAgo.getDate() - 21);
+            day21DaysAgo.setDate(day21DaysAgo.getDate() - 6);
             var start_date = day21DaysAgo.toISOString().substr(0, 10);
             var now = new Date();
             //activate below line to get time entries from today also, however, if a time entry is currently active, issues will arise
