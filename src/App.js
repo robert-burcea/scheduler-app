@@ -92,14 +92,14 @@ function App() {
   /* **********TODOIST FUNCTIONS************* */
 
   const fetchAllData = () => {
-    fetch(`https://scheduler-app-v2.web.app:5000/api/todoist/`, {
+    fetch(`http://localhost:5000/api/todoist/`, {
       headers: {
         'Authorization':`${todoistApiKey}`
       }
     })
     .then((response) => response.json())
     .then((todoistData) => {
-      fetch(`https://scheduler-app-v2.web.app:5000/api/toggl/`, {
+      fetch(`http://localhost:5000/api/toggl/`, {
         headers: {
           'Authorization':`${togglApiKey}`
         }
