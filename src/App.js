@@ -91,6 +91,27 @@ function App() {
 
   /* **********TODOIST FUNCTIONS************* */
 
+  const combineTodoistData = (projects, tasks) => {
+    //creates empty array that will be the modified projects 
+    //where each project will have an obj 'tasks' (the tasks corresponding to the project)
+    var newProjects = [];
+    //cicles through every project in search of tasks that belong to the current project
+    for(let i = 0; i < projects?.length; i++) {
+        //creates empty array to store found tasks
+        var project = projects[i];
+        var tasksBelongingToProject = [];
+        tasks?.forEach((task) => {
+            //if the id of the task's projectId matches the project id
+            if(task.projectId === project.id)
+            {
+                tasksBelongingToProject.push(task)
+            }
+        })
+        project.tasks = tasksBelongingToProject;
+        newProjects.push(project)
+    }
+    return newProjects;
+  }
   const fetchAllData = () => {
     fetch(`http://localhost:5000/api/todoist/`, {
       headers: {
@@ -99,6 +120,9 @@ function App() {
     })
     .then((response) => response.json())
     .then((todoistData) => {
+      console.log("TODOIST FROM SERVER:", todoistData)
+      var combinedTodoistData = combineTodoistData({...todoistData.projects}, {...todoistData.tasks});
+      console.log("COMBINED TODOIST DATA:", combinedTodoistData)
       fetch(`http://localhost:5000/api/toggl/`, {
         headers: {
           'Authorization':`${togglApiKey}`
@@ -106,7 +130,7 @@ function App() {
       })
       .then((response) => response.json())
       .then((togglData) => {
-        setTodoistData(todoistData)
+        setTodoistData(combinedTodoistData)
         setTogglData(togglData)
         setFetchingReady(true)
       })

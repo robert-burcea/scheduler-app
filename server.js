@@ -60,29 +60,7 @@ app.get('/api/toggl', (req, res) => {
 
 app.get('/api/todoist', (req,res) => {
     const todoistApiKey = req.headers.authorization;
-    const combineTodoistData = (projects, tasks) => {
-        //creates empty array that will be the modified projects 
-        //where each project will have an obj 'tasks' (the tasks corresponding to the project)
-        let newProjects = [];
-        //cicles through every project in search of tasks that belong to the current project
-        for(let i = 0; i < projects?.length; i++) {
-            //creates empty array to store found tasks
-            let project = projects[i];
-            let tasksBelongingToProject = [];
-            tasks?.forEach((task) => {
-                //if the id of the task's projectId matches the project id
-                if(task.projectId === project.id)
-                {
-                    tasksBelongingToProject.push(task)
-                }
-            })
-            project.tasks = tasksBelongingToProject;
-            newProjects.push(project)
-        }
-        return newProjects;
-    }
-
-    var todoistData = [];
+    var todoistData = {};
     let todoistApi = new todoist.TodoistApi(todoistApiKey)
     //fetches TODOIST projects
     todoistApi.getProjects()
@@ -90,7 +68,7 @@ app.get('/api/todoist', (req,res) => {
         //fetches TODOIST tasks
         todoistApi.getTasks()
         .then((tasks) => {
-            todoistData = combineTodoistData(projects,tasks);
+            todoistData = {projects:{...projects}, tasks:{...tasks}};
             res.json(todoistData)
         })
     })
