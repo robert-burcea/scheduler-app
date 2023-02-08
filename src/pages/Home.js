@@ -14,7 +14,21 @@ const Home = ({dataSet}) => {
     <div className="m-2">
       {dataSet ? data?.leastWorkedProject ?
       <div>
-        <div className="text-lg flex flex-col items-center m-5">Based on your last 6 days activity and your week targets, you should work on this now</div>
+        {/*<div className="text-lg flex flex-col items-center m-5">
+        <button 
+        type="button" 
+        class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-green-300 
+        font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-blue-800 dark:focus:ring-green-800">
+          Week Targets Recommendation
+          </button>
+          <button 
+          type="button" 
+          class="focus:outline-none text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:ring-yellow-300 
+          font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:focus:ring-yellow-900">
+            Month Targets Recommendation
+            </button>
+      </div>*/}
+        <div className="text-lg flex flex-col items-center m-5">Based on your week targets, you should work on this now</div>
         <div><TogglProject project={data?.leastWorkedProject?.project}/></div>
         <div>{data?.leastWorkedProject?.tasks?.map((task, index) => {
           return <TodoistTask task={task} key={index}/>

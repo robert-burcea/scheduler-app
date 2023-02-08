@@ -30,7 +30,10 @@ const Chart = ({ hoursSpent, targetHours }) => {
 
   return (
     <div>
-      <p className="text-lg flex flex-col items-center m-5">{percentage.toFixed(2)}% of target reached</p>
+      <p className="text-lg flex flex-col items-center m-5">{percentage > 0 ? percentage.toFixed(1) : '0'}% of target reached</p>
+      <p className="text-lg flex items-center m-5 justify-center">
+        <span className="text-green-500">{hoursSpent > 0 ? (hoursSpent.toFixed(1)) : '0'}</span> / <span className="text-red-500">{targetHours}</span>
+        </p>
       <Doughnut data={data}/>
     </div>
   );
