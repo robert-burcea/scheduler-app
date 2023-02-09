@@ -68,7 +68,7 @@ app.get('/api/todoist', (req,res) => {
         //fetches TODOIST tasks
         todoistApi.getTasks()
         .then((tasks) => {
-            todoistData = {projects:{...projects}, tasks:{...tasks}};
+            todoistData = {projects:[...projects], tasks:[...tasks]};
             res.json(todoistData)
         })
     })

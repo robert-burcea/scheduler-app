@@ -110,6 +110,7 @@ function App() {
         project.tasks = tasksBelongingToProject;
         newProjects.push(project)
     }
+    console.log("NEW PROJECTS", newProjects)
     return newProjects;
   }
   const fetchAllData = () => {
@@ -120,8 +121,8 @@ function App() {
     })
     .then((response) => response.json())
     .then((todoistData) => {
-      console.log("TODOIST FROM SERVER:", todoistData)
-      var combinedTodoistData = combineTodoistData({...todoistData.projects}, {...todoistData.tasks});
+      console.log("DATA FROM SERVERE", todoistData)
+      var combinedTodoistData = combineTodoistData(todoistData.projects, todoistData.tasks);
       console.log("COMBINED TODOIST DATA:", combinedTodoistData)
       fetch(`http://localhost:5000/api/toggl/`, {
         headers: {
