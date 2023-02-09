@@ -114,7 +114,7 @@ function App() {
     return newProjects;
   }
   const fetchAllData = () => {
-    fetch(`https://us-central1-scheduler-app-v2.cloudfunctions.net/app/api/todoist/`, {
+    fetch(`http://localhost:5000/api/todoist/`, {
       headers: {
         'Authorization':`${todoistApiKey}`
       }
@@ -124,7 +124,7 @@ function App() {
       console.log("DATA FROM SERVERE", todoistData)
       var combinedTodoistData = combineTodoistData(todoistData.projects, todoistData.tasks);
       console.log("COMBINED TODOIST DATA:", combinedTodoistData)
-      fetch(`https://us-central1-scheduler-app-v2.cloudfunctions.net/app/api/toggl/`, {
+      fetch(`http://localhost:5000/api/toggl/`, {
         headers: {
           'Authorization':`${togglApiKey}`
         }
