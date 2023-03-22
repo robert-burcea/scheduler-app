@@ -63,10 +63,22 @@ function App() {
     };
 
     const getApis = () => {
-    let togglApiKey = prompt("Insert Toggl API:")
-    let todoistApiKey = prompt("Insert Todoist API:")
-    setTogglApiKey(togglApiKey)
-    setTodoistApiKey(todoistApiKey)
+      var togglApiKey = localStorage.getItem('togglApiKey');
+      var todoistApiKey = localStorage.getItem('todoistApiKey');
+      if(!togglApiKey){
+        togglApiKey = prompt("Insert Toggl API:");
+        setTogglApiKey(togglApiKey)
+        localStorage.setItem('togglApiKey', togglApiKey)
+      }
+      else if(!todoistApiKey){
+        todoistApiKey = prompt("Insert Todoist API:")
+        setTodoistApiKey(todoistApiKey)
+        localStorage.setItem('todoistApiKey', todoistApiKey)
+      }
+      else {
+        setTogglApiKey(togglApiKey)
+        setTodoistApiKey(todoistApiKey)
+      }
     console.log(todoistApiKey, togglApiKey)
     setApisReady(true)
   }
